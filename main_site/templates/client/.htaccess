@@ -1,0 +1,4 @@
+AuthUserFile "/home/thesteelco/.htpasswds/public_html/client/passwd"
+AuthType Basic
+AuthName "Client Access"
+require valid-user

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>The Steel Company</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {%- block css -%}
+    <link rel="stylesheet" href={{ url_for('static', filename="css/normalize.css") }} type="text/css">
+    <link rel="stylesheet" href={{ url_for('static', filename="css/bootstrap.css") }} type="text/css">
+    <link rel="stylesheet" href={{ url_for('static', filename="css/bootstrap-responsive.css") }} type="text/css">
+    <link rel="stylesheet" href={{ url_for('static', filename="css/main.css") }} type="text/css">
+    <link rel="stylesheet" href={{ url_for('static', filename="css/styles.css") }} type="text/css">
+    <link rel="stylesheet" href={{ url_for('static', filename="css/fineuploader-3.3.0.css") }} type="text/css">
+    <link rel="stylesheet" href={{ url_for('static', filename="css/index.css") }} type="text/css">
+  {%- endblock -%}
+</head>
+
+<body>
+  <div class="header grayText fStdBook row">
+     <span class="cornerlogo">      
+      <a href="http://www.thesteelco.com"><img src="../static/img/steel_logo_gray_small.png"alt="The Steel Company" border="0" /></a>
+      <span class="floatright">
+        <a href="/about" class="grayText" title="About Us">
+            <span class="font16">ABOUT US</span>
+        </a>
+        <span class="headerPipeFix">&nbsp;|&nbsp;</span>
+        <a href="/press" class="grayText" title="Press">
+            <span class="font16">PRESS</span>
+        </a>
+        <span class="headerPipeFix">&nbsp;|&nbsp;</span>
+        <a href="/contact" class="grayText" title="Contact The Steel Company">
+            <span class="font16">CONTACT US</span>
+        </a>
+        <span class="headerPipeFix">&nbsp;|&nbsp;</span>
+        <a href="/client" class="socialMarginFix grayText letterSpace1" title="Client Login">
+            <span class="font12 margintop5">CLIENT LOGIN</span>
+        </a>
+      </span>
+      </span>  
+  </div>
+
+<div class="container text-center" id="error">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="main-icon text-success"><span class="uxicon uxicon-clock-refresh"></span></div>
+      <img src="../static/img/steel_logo_white.png"alt="The Steel Company"></img> <br>
+      <h2><b>The Steel Company</b> has been under contract with leading film distributors worldwide for more than twenty-five years, one distributor per territory, for the acquisition of motion pictures in the independent marketplace by pursuing and analyzing product from the status of development to completion. <br><br>
+  <b>The Steel Company</b> has and does arrange major studios distribution for both theatrical and home entertainment on a territory-by-territory worldwide basis for independent distributors. <br><br>
+  <b>The Steel Company</b> has and does represent equity investors for script development, budget finance and the identification of promising investment opportunities from producers, agents, managers, lawyers and sales companies. <br><br>
+  <b>The Steel Company</b> consults, advises and arranges exhibition ventures. <br><br>  
+       </h2>
+
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

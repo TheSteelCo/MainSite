@@ -1,0 +1,635 @@
+/*
+ * HTML5 Boilerplate
+ *
+ * What follows is the result of much research on cross-browser styling.
+ * Credit left inline and big thanks to Nicolas Gallagher, Jonathan Neal,
+ * Kroc Camen, and the H5BP dev community and team.
+ */
+
+/* ==========================================================================
+   Base styles: opinionated defaults
+   ========================================================================== */
+
+html,
+button,
+input,
+select,
+textarea {
+    color: #222;
+}
+
+body {
+    font-size: 1em;
+    line-height: 1.4;
+}
+
+/*
+ * Remove text-shadow in selection highlight: h5bp.com/i
+ * These selection rule sets have to be separate.
+ * Customize the background color to match your design.
+ */
+
+::-moz-selection {
+    background: #b3d4fc;
+    text-shadow: none;
+}
+
+::selection {
+    background: #b3d4fc;
+    text-shadow: none;
+}
+
+/*
+ * A better looking default horizontal rule
+ */
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0;
+}
+
+/*
+ * Remove the gap between images and the bottom of their containers: h5bp.com/i/440
+ */
+
+img {
+    vertical-align: middle;
+}
+
+/*
+ * Remove default fieldset styles.
+ */
+
+fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+/*
+ * Allow only vertical resizing of textareas.
+ */
+
+textarea {
+    resize: vertical;
+}
+
+/* ==========================================================================
+   Chrome Frame prompt
+   ========================================================================== */
+
+.chromeframe {
+    margin: 0.2em 0;
+    background: #ccc;
+    color: #000;
+    padding: 0.2em 0;
+}
+
+/* ==========================================================================
+   Author's custom styles
+   ========================================================================== */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ==========================================================================
+   Helper classes
+   ========================================================================== */
+
+/*
+ * Image replacement
+ */
+
+.ir {
+    background-color: transparent;
+    border: 0;
+    overflow: hidden;
+    /* IE 6/7 fallback */
+    *text-indent: -9999px;
+}
+
+.ir:before {
+    content: "";
+    display: block;
+    width: 0;
+    height: 150%;
+}
+
+/*
+ * Hide from both screenreaders and browsers: h5bp.com/u
+ */
+
+.hidden {
+    display: none !important;
+    visibility: hidden;
+}
+
+/*
+ * Hide only visually, but have it available for screenreaders: h5bp.com/v
+ */
+
+.visuallyhidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+/*
+ * Extends the .visuallyhidden class to allow the element to be focusable
+ * when navigated to via the keyboard: h5bp.com/p
+ */
+
+.visuallyhidden.focusable:active,
+.visuallyhidden.focusable:focus {
+    clip: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    position: static;
+    width: auto;
+}
+
+/*
+ * Hide visually and from screenreaders, but maintain layout
+ */
+
+.invisible {
+    visibility: hidden;
+}
+
+/*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *    `contenteditable` attribute is included anywhere else in the document.
+ *    Otherwise it causes space to appear at the top and bottom of elements
+ *    that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *    `:before` to contain the top-margins of child elements.
+ */
+
+.clearfix:before,
+.clearfix:after {
+    content: " "; /* 1 */
+    display: table; /* 2 */
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+/*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+
+.clearfix {
+    *zoom: 1;
+}
+
+/* ==========================================================================
+   EXAMPLE Media Queries for Responsive Design.
+   These examples override the primary ('mobile first') styles.
+   Modify as content requires.
+   ========================================================================== */
+
+@media only screen and (min-width: 35em) {
+    /* Style adjustments for viewports that meet the condition */
+}
+
+@media print,
+       (-o-min-device-pixel-ratio: 5/4),
+       (-webkit-min-device-pixel-ratio: 1.25),
+       (min-resolution: 120dpi) {
+    /* Style adjustments for high resolution devices */
+}
+
+/* ==========================================================================
+   Print styles.
+   Inlined to avoid required HTTP connection: h5bp.com/r
+   ========================================================================== */
+
+@media print {
+    * {
+        background: transparent !important;
+        color: #000 !important; /* Black prints faster: h5bp.com/s */
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    a,
+    a:visited {
+        text-decoration: underline;
+    }
+
+    a[href]:after {
+        content: " (" attr(href) ")";
+    }
+
+    abbr[title]:after {
+        content: " (" attr(title) ")";
+    }
+
+    /*
+     * Don't show links for images, or javascript/internal links
+     */
+
+    .ir a:after,
+    a[href^="javascript:"]:after,
+    a[href^="#"]:after {
+        content: "";
+    }
+
+    pre,
+    blockquote {
+        border: 1px solid #999;
+        page-break-inside: avoid;
+    }
+
+    thead {
+        display: table-header-group; /* h5bp.com/t */
+    }
+
+    tr,
+    img {
+        page-break-inside: avoid;
+    }
+
+    img {
+        max-width: 100% !important;
+    }
+
+    @page {
+        margin: 0.5cm;
+    }
+
+    p,
+    h2,
+    h3 {
+        orphans: 3;
+        widows: 3;
+    }
+
+    h2,
+    h3 {
+        page-break-after: avoid;
+    }
+}
+
+.floatleft{float:left;margin:0;}
+.floatright{float:right;margin:0}
+.clear{clear:both;}
+.textLeft {text-align: left;}
+.textRight {text-align: right;}
+
+
+.font8 {font-size: 8px;}
+.font10 {font-size: 10px;}
+.font11 {font-size: 11px;}
+.font12 {font-size: 12px;}
+.font13 {font-size: 13px;}
+.font14 {font-size: 14px;}
+.font15 {font-size: 15px;}
+.font16 {font-size: 16px;}
+.font17 {font-size: 17px;}
+.font18 {font-size: 18px;}
+.font19 {font-size: 19px;}
+.font20 {font-size: 20px;}
+.font21 {font-size: 21px;}
+.font22 {font-size: 22px;}
+.font23 {font-size: 23px;}
+.font24 {font-size: 24px;}
+.FONT16 {font-size: 16px;}
+.FONT17 {font-size: 17px;}
+.FONT18 {font-size: 18px;}
+.FONT19 {font-size: 19px;}
+.FONT20 {font-size: 20px;}
+.FONT21 {font-size: 21px;}
+.FONT22 {font-size: 22px;}
+.FONT23 {font-size: 23px;}
+.FONT24 {font-size: 24px;}
+.font25 {font-size: 25px;}
+.FONT25 {font-size: 25px;}
+.font26 {font-size: 26px;}
+.FONT26 {font-size: 26px;}
+.font27 {font-size: 27px;}
+.font28 {font-size: 28px;}
+.font30 {font-size: 30px;}
+.font32 {font-size: 32px;}
+.font34 {font-size: 34px;}
+.font36 {font-size: 36px;}
+
+.lineheight14 { line-height: 14px;}
+
+
+
+.marginright2 {margin-right: 2px;}
+.marginright4 {margin-right: 4px;}
+.marginright5 {margin-right: 5px;}
+.marginright6 {margin-right: 6px;}
+.marginright8 {margin-right: 8px;}
+.marginright10 {margin-right: 10px;}
+.marginright12 {margin-right: 12px;}
+.marginright14 {margin-right: 14px;}
+.marginright16 {margin-right: 16px;}
+.marginright18 {margin-right: 18px;}
+.marginright20 {margin-right: 20px;}
+.marginright24 {margin-right: 24px;}
+.marginright30 {margin-right: 30px;}
+
+.marginleft2 {margin-left: 2px;}
+.marginleft4 {margin-left: 4px;}
+.marginleft6 {margin-left: 6px;}
+.marginleft7 {margin-left: 7px;}
+.marginleft8 {margin-left: 8px;}
+.marginleft10 {margin-left: 10px;}
+.marginleft12 {margin-left: 12px;}
+.marginleft14 {margin-left: 14px;}
+.marginleft16 {margin-left: 16px;}
+.marginleft18 {margin-left: 18px;}
+.marginleft19 {margin-left: 19px;}
+.marginleft20 {margin-left: 20px;}
+.marginleft22 {margin-left: 22px;}
+.marginleft30 {margin-left: 30px;}
+.marginleft40 {margin-left: 40px;}
+.marginleft50 {margin-left: 50px;}
+.marginleft80 {margin-left: 33px;}
+
+.marginleftneg2 {margin-left:-2px;}
+
+
+.margintop1 {margin-top: 1px;}
+.margintop2 {margin-top: 2px;}
+.margintop33 {margin-top: 3px;}
+.margintop3 {margin-top: 2px;}
+.margintop4 {margin-top: 4px;}
+.margintop5 {margin-top: 5px;}
+.margintop6 {margin-top: 6px;}
+.margintop7 {margin-top: 7px;}
+.margintop8 {margin-top: 8px;}
+.margintop10 {margin-top: 10px;}
+.margintop11 {margin-top: 11px;}
+.margintop12 {margin-top: 12px;}
+.margintop13 {margin-top: 13px;}
+.margintop14 {margin-top: 14px;}
+.margintop15 {margin-top: 15px;}
+.margintop16 {margin-top: 16px;}
+.margintop18 {margin-top: 18px;}
+.margintop20 {margin-top: 20px;}
+.margintop24 {margin-top: 24px;}
+.margintop30 {margin-top: 30px;}
+.paddingtop13 {padding-top:13px;}
+.paddingtop1 {padding-top:1px;y}
+/* negative */
+.margintopneg3 {margin-top: -3px;}
+.margintopneg6 {margin-top: -6px;}
+.margintopneg12 {margin-top: -12px;}
+.margintopneg15 {margin-top: -20px;}
+.topneg2 {margin-top:-2px;}
+
+.marginbottom2 {margin-bottom: 2px;}
+.marginbottom4 {margin-bottom: 4px;}
+.marginbottom5 {margin-bottom: 5px;}
+.marginbottom6 {margin-bottom: 6px;}
+.marginbottom8 {margin-bottom: 8px;}
+.marginbottom10 {margin-bottom: 10px;}
+.marginbottom11 {margin-bottom: 11px;}
+.marginbottom12 {margin-bottom: 12px;}
+.marginbottom14 {margin-bottom: 14px;}
+.marginbottom15 {margin-bottom: 15px;}
+.marginbottom16 {margin-bottom: 16px;}
+.marginbottom17 {margin-bottom: 17px;}
+.marginbottom18 {margin-bottom: 18px;}
+.marginbottom20 {margin-bottom: 20px;}
+.marginbottom25 {margin-bottom: 25px;}
+.marginbottom26 {margin-bottom: 26px;}
+.marginbottom27 {margin-bottom: 27px;}
+.marginbottom30 {margin-bottom: 30px;}
+/* negative */
+.marginbottomneg12 {margin-bottom: -12px;}
+
+
+/*TEXT ALIGNS*/
+.textleft{text-align: left;}
+.textright{text-align: right;}
+.textcenter{text-align: center;}
+.textJustify{text-align: justify;}
+/* this CSS is not part of the widget, it is here just as an example of the demo page styling.... Don't copy this one, roll your own. One
+ * of the key things about the widget is that it allows you to do your own styling!
+ */
+
+#editor {
+	max-height: 500px;
+	height: 500px;
+	background-color: white;
+	border-collapse: separate; 
+	border: 1px solid rgb(204, 204, 204); 
+	padding: 4px; 
+	box-sizing: content-box; 
+	-webkit-box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px 0px inset; 
+	box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px 0px inset;
+	border-top-right-radius: 3px; border-bottom-right-radius: 3px;
+	border-bottom-left-radius: 3px; border-top-left-radius: 3px;
+	overflow: scroll;
+	outline: none;
+}
+#voiceBtn {
+  width: 20px;
+  color: transparent;
+  background-color: transparent;
+  transform: scale(2.0, 2.0);
+  -webkit-transform: scale(2.0, 2.0);
+  -moz-transform: scale(2.0, 2.0);
+  border: transparent;
+  cursor: pointer;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
+
+div[data-role="editor-toolbar"] {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.dropdown-menu a {
+  cursor: pointer;
+}
+
+
+/* For the details, see:
+   http://flowplayer.org/tools/dateinput/index.html#skinning */
+
+/* the input field */
+.date {
+    border:1px solid #ccc;
+    font-size:18px;
+    padding:4px;
+    text-align:center;
+    width:194px;
+
+    -moz-box-shadow:0 0 10px #eee inset;
+    -webkit-box-shadow:0 0 10px #eee inset;
+}
+
+/* calendar root element */
+#calroot {
+    /* place on top of other elements. set a higher value if nessessary */
+    z-index:10000;
+
+    margin-top:-1px;
+    width:198px;
+    padding:2px;
+    background-color:#fff;
+    font-size:11px;
+    border:1px solid #ccc;
+
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+
+    -moz-box-shadow: 0 0 15px #666;
+    -webkit-box-shadow: 0 0 15px #666;
+}
+
+/* head. contains title, prev/next month controls and possible month/year selectors */
+#calhead {
+    padding:2px 0;
+    height:22px;
+}
+
+#caltitle {
+    font-size:14px;
+    color:#0150D1;
+    float:left;
+    text-align:center;
+    width:155px;
+    line-height:20px;
+    text-shadow:0 1px 0 #ddd;
+}
+
+#calnext, #calprev {
+    display:block;
+    width:20px;
+    height:20px;
+    background:transparent url(/img/prev.gif) no-repeat scroll center center;
+    float:left;
+    cursor:pointer;
+}
+
+#calnext {
+    background-image:url(/img/next.gif);
+    float:right;
+}
+
+#calprev.caldisabled, #calnext.caldisabled {
+    visibility:hidden;
+}
+
+/* year/month selector */
+#caltitle select {
+    font-size:10px;
+}
+
+/* names of the days */
+#caldays {
+    height:14px;
+    border-bottom:1px solid #ddd;
+}
+
+#caldays span {
+    display:block;
+    float:left;
+    width:28px;
+    text-align:center;
+}
+
+/* container for weeks */
+#calweeks {
+    background-color:#fff;
+    margin-top:4px;
+}
+
+/* single week */
+.calweek {
+    clear:left;
+    height:22px;
+}
+
+/* single day */
+.calweek a {
+    display:block;
+    float:left;
+    width:27px;
+    height:20px;
+    text-decoration:none;
+    font-size:11px;
+    margin-left:1px;
+    text-align:center;
+    line-height:20px;
+    color:#666;
+    -moz-border-radius:3px;
+    -webkit-border-radius:3px;
+}
+
+/* different states */
+.calweek a:hover, .calfocus {
+    background-color:#ddd;
+}
+
+/* sunday */
+a.calsun {
+    color:red;
+}
+
+/* offmonth day */
+a.caloff {
+    color:#ccc;
+}
+
+a.caloff:hover {
+    background-color:rgb(245, 245, 250);
+}
+
+
+/* unselecteble day */
+a.caldisabled {
+    background-color:#efefef !important;
+    color:#ccc	!important;
+    cursor:default;
+}
+
+/* current day */
+#calcurrent {
+    background-color:#498CE2;
+    color:#fff;
+}
+
+/* today */
+#caltoday {
+    background-color:#333;
+    color:#fff;
+}
