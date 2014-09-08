@@ -1,0 +1,38 @@
+<html>
+<head>
+  <title>{% block title %}The Steel Company {% endblock title %}</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% include 'css.html' %}
+  {% include 'js.html' %}
+  {%- block extra_css -%}
+  {%- endblock -%}
+</head>
+
+<body>
+  <div class="header grayText fStdBook row">
+     <span class="cornerlogo">
+      <a href={{ url_for('index') }}><img src="../static/img/steel_logo_gray_small.png"alt="The Steel Company" border="0" /></a>
+      <span class="floatright">
+        <a href="/about" class="grayText" title="About Us">
+            <span class="font16">ABOUT US</span>
+        </a>
+        <span class="headerPipeFix">&nbsp;|&nbsp;</span>
+        <a href="/press" class="grayText" title="Press">
+            <span class="font16">PRESS</span>
+        </a>
+        <span class="headerPipeFix">&nbsp;|&nbsp;</span>
+        <a href="/contact" class="grayText" title="Contact The Steel Company">
+            <span class="font16">CONTACT US</span>
+        </a>
+        <span class="headerPipeFix">&nbsp;|&nbsp;</span>
+        <a href="/client" class="socialMarginFix grayText letterSpace1" title="Client Login">
+            <span class="font12 margintop5">CLIENT LOGIN</span>
+        </a>
+      </span>
+      </span>
+  </div>
+  {% block page %}
+  {% endblock page %}
+</body>
+</html>

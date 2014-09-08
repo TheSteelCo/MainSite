@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block page %}
+<div class="container text-center" id="error">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="main-icon text-success"><span class="uxicon uxicon-clock-refresh"></span></div>
+        <h3><a href={{ url_for('about') }}>Gordon Steel</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href={{ url_for('aboutVillalobos') }}>Angela Villalobos</a></h3><br><br>
+		{% block about_page %}
+		{% endblock about_page%}
+    </div>
+  </div>
+
+</div>
+{% endblock page %}
