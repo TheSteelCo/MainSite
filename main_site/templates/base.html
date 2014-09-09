@@ -4,15 +4,17 @@
   <meta http-equiv="content-type" content="text/html; charset=utf-8" >
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   {% include 'css.html' %}
-  {% include 'js.html' %}
   {%- block extra_css -%}
+  {%- endblock -%}
+  {% include 'js.html' %}
+  {%- block extra_js -%}
   {%- endblock -%}
 </head>
 
 <body>
   <div class="header grayText fStdBook row">
      <span class="cornerlogo">
-      <a href={{ url_for('index') }}><img src="../static/img/steel_logo_gray_small.png"alt="The Steel Company" border="0" /></a>
+      <a href={{ url_for('index') }}><img src={{ url_for('static', filename="img/steel_logo_gray_small.png") }} alt="The Steel Company" border="0" /></a>
       <span class="floatright">
         <a href="/about" class="grayText" title="About Us">
             <span class="font16">ABOUT US</span>
@@ -26,8 +28,8 @@
             <span class="font16">CONTACT US</span>
         </a>
         <span class="headerPipeFix">&nbsp;|&nbsp;</span>
-        <a href="/client" class="socialMarginFix grayText letterSpace1" title="Client Login">
-            <span class="font12 margintop5">CLIENT LOGIN</span>
+        <a href="/client" class="socialMarginFix grayText letterSpace1" title="Login">
+            <span class="font12 margintop5">LOGIN</span>
         </a>
       </span>
       </span>

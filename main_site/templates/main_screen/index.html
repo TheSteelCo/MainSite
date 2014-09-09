@@ -1,0 +1,36 @@
+<html>
+<head>
+  <title>{% block title %}The Steel Company {% endblock title %}</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% include 'css.html' %}
+  {%- block extra_css -%}
+  {%- endblock -%}
+  {% include 'js.html' %}
+  {%- block extra_js -%}
+  {%- endblock -%}
+</head>
+
+<body>
+    <div class="grayText">
+      <a href={{ url_for('index') }}><img src="../static/img/steel_logo_gray_small.png"alt="The Steel Company" border="0" /></a>
+      <span class="pull-right"><a href="#">log out</a></span>
+      <ul class="nav nav-tabs">
+        <li class="active">
+          <a href="#">General</a>
+        </li>
+        <li>
+          <a href="#">Hot List</a>
+        </li>
+        <li class="dropdown pull-right">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Admin
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+            <li><a href="#">Users</a></li>
+            <li><a href="#">Upload</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+</body>
+</html>

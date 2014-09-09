@@ -20,7 +20,8 @@ def aboutVillalobos():
 
 @app.route('/client')
 def client():
-    return render_template('client/index.html')
+	return main()
+    #return render_template('client/index.html')
 
 
 @app.route('/press')
@@ -31,3 +32,7 @@ def press():
 @app.route('/contact')
 def contact():
 	return render_template('contact/index.html')
+
+@app.route('/main')
+def main():
+	return render_template('main_screen/index.html')
