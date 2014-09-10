@@ -1,9 +1,6 @@
 body {
-  height: 1200px;
   background: linear-gradient(gray, black);
-  /*background-color: #eee;*/
 }
-
 body, h1, p {
   font-family: "Helvetica Neue", "Segoe UI", Segoe, Helvetica, Arial, "Lucida Grande", sans-serif;
   font-weight: normal;
@@ -65,3 +62,16 @@ a {
 a:link { color:#cccccc; }
 a:visited { color:white;  }
 a:hover { color:white;  }
+
+a.btn:link {
+  color: #333333;
+}
+a.btn:visited {
+  color: #333333;
+}
+a.btn:hover {
+  color: #333333;
+}
+a.btn:active {
+  color: #333333;
+}

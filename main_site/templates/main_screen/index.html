@@ -9,12 +9,99 @@
   {% include 'js.html' %}
   {%- block extra_js -%}
   {%- endblock -%}
+  <style>
+  select {
+    vertical-align: top;
+  }
+  .searchBox input{
+    margin-top: 8px;
+  }
+  .container {
+    margin-top: 0px;
+    margin-left: 0px;
+    max-width: 1200px ;
+    min-width: 780px;
+  }
+  .col-centered {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 1500px;
+  }
+  .contents {
+    background-color: #CCCCCC;
+    height: 1200px;
+  }
+  .nav {
+    margin-bottom: 1px;
+  }
+  .grayText .logout{
+    margin-left: 5px;
+    margin-right: 20px;
+    text-decoration: underline;
+  }
+  .report-header {
+    border-bottom-width: 3px;
+    border-bottom-style: solid;
+    margin-left: 10px;
+  }
+  .report-header .sort-select {
+    font-weight: bold;
+  }
+  .report-header .sort {
+    color: #000000;
+    text-decoration: underline;
+  }
+  .report-body .notes {
+    text-align: left;
+    font-size: 14px;
+  }
+  .report-body {
+    margin-left: 10px;
+  }
+  .search-item {
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+  }
+  .btn-search{
+    height: 20px;
+    margin-top: 0px;
+    margin-left: 0px;
+  }
+  .leftmost{
+    margin-left: 0px;
+  }
+  .report-body .imdb-link{
+    color: blue;
+    font-size: 10px;
+    text-align: text-bottom;
+  }
+  .pagination {
+    margin-top: 10px;
+    margin-right: 20px;
+  }
+  .pagination a {
+    color: #333333;
+  }
+  .results {
+    font-size: 12px;
+    margin-left: 20px;
+    vertical-align: middle;
+    height: 30px;
+  }
+  .search-select {
+    margin-top: 8px;
+    margin-left: 20px;
+    width: 100px;
+  }
+  </style>
 </head>
 
 <body>
     <div class="grayText">
-      <a href={{ url_for('index') }}><img src="../static/img/steel_logo_gray_small.png"alt="The Steel Company" border="0" /></a>
-      <span class="pull-right"><a href="#">log out</a></span>
+      <a href={{ url_for('index') }} class="pull-left"><img src={{ url_for('static', filename="img/steel_logo_gray_small.png") }} alt="The Steel Company" border="0" /></a>
+      <div class="pull-right">Michael.Villalobos.Jr@gmail.com<a class="logout" href="#">log out</a></div>
+      <br><br>
       <ul class="nav nav-tabs">
         <li class="active">
           <a href="#">General</a>
@@ -22,15 +109,78 @@
         <li>
           <a href="#">Hot List</a>
         </li>
-        <li class="dropdown pull-right">
+        <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Admin
-          <b class="caret"></b></a>
+          <i class="icon-chevron-down icon-white"></i></a>
           <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-            <li><a href="#">Users</a></li>
-            <li><a href="#">Upload</a></li>
+            <li class="text-left"><a href="#">Manage Users</a></li>
+            <li class="text-left"><a href="#">Data Upload</a></li>
           </ul>
         </li>
       </ul>
+    </div>
+    <div>
+      <div class="contents">
+        <div class="pull-left searchBox">
+          <select class="search-select"><option>Title</option>><option>Company</option><option>Genre</option></select>
+          <input type="search" placeholder="Search" class="input-large">
+          <a class="btn btn-search" data-bind="click: saveNewPassword"><i class="icon-search"></i></a>
+        </div>
+        <div class="pull-right pagination pagination-small">
+          <span class="results">Showing 1-20 of 500 results</span>
+          <ul>
+            <li class="disabled"><a href="#"><<</a></li>
+            <li class="active"><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">>></a></li>
+          </ul>
+        </div>
+        <div class="clearfix"></div>
+        <div class="container col-centered">
+          <div class="row span12 report-header">
+            <div class="span3 leftmost">
+              <div class="pull-left">
+                <a href="#" class="sort">Company</a>
+              </div>
+            </div>
+            <div class="span4">
+              <div class="pull-left">
+                <a href = "#" class="sort sort-select">Title <b class="caret" style="vertical-align: middle;"></b></a>
+              </div>
+            </div>
+            <div class="span2">
+              <div class="pull-left">
+                <a href="#" class="sort">Genre</a>
+              </div>
+            </div>
+            <div class="span2 pull-right text-right">
+              <a href="#" class="sort">Status</a>
+            </div>
+          </div>
+          <br>
+          <div class="row span12 report-body search-item">
+            <div class="span3 leftmost"><span class="pull-left"><b>EXCLUSIVE MEDIA</b> <a class="imdb-link" href="#">[imdb]</a></span></div>
+            <div class="span4"><span class="pull-left"><b>1 (FORMULA ONE PROJECT)</b></span></div>
+            <div class="span2"><span class="pull-left"><i>Documentary</i></span></div>
+            <div class="span2 pull-right text-right">Completed</div>
+            <div class="row span 12 notes">
+            Prod: Nigel Sinclair ("End of Watch", "George Harrison: Living in the Material World"), Michael Shevloff ("La Cucaracha", "Bandwagon"). Dir: Paul Crowder ("Last Play at Shea", "Once in a Lifetime: The Extraordinary Story of the New York Cosmos"). Writer: Mark Monroe ("Chasing Ice", "Last Play at Shea"). Cast (voice over): Michael Fassbender: "Xmen: First Class", "Prometheus"). Story: A documentary that follows the lives of several renowned formula one racers. USA: Not set.
+            </div>
+            <div class="span3 text-left">(200,000)</div>
+          </div>
+          <div class="row span12 report-body search-item">
+            <div class="span3 leftmost"><span class="pull-left"><b>EUROPA</b> <a class="imdb-link" href="#">[imdb]</a></span></div>
+            <div class="span4"><span class="pull-left"><b>108 DEMON KING</b></span></div>
+            <div class="span2"><span class="pull-left"><i>Comedy/Animation/3d</i></span></div>
+            <div class="span2 pull-right text-right">In production</div>
+            <div class="row span 12 notes">
+            Prod: Fundamental ("The Family"), Same Player ("Bienvenue  bord", "Protger et servir"). Dir: Pascal Morelli ("The Busy World of Richard Scarry"-TV). Writer: Pascal Morelli (no writing credits), Jean Pecheux (no credits). Story: A young prince in 11th century China must help to defeat the armies of the imperial tyranny Regent Gao-le Bel. USA: not set.
+            </div>
+            <div class="span3 text-left">(avail)</div>
+          </div>
+        </div>
+      </div>
     </div>
 </body>
 </html>

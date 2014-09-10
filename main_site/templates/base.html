@@ -13,26 +13,26 @@
 
 <body>
   <div class="header grayText fStdBook row">
-     <span class="cornerlogo">
+     <div class="cornerlogo">
       <a href={{ url_for('index') }}><img src={{ url_for('static', filename="img/steel_logo_gray_small.png") }} alt="The Steel Company" border="0" /></a>
-      <span class="floatright">
-        <a href="/about" class="grayText" title="About Us">
-            <span class="font16">ABOUT US</span>
-        </a>
-        <span class="headerPipeFix">&nbsp;|&nbsp;</span>
-        <a href="/press" class="grayText" title="Press">
-            <span class="font16">PRESS</span>
-        </a>
-        <span class="headerPipeFix">&nbsp;|&nbsp;</span>
-        <a href="/contact" class="grayText" title="Contact The Steel Company">
-            <span class="font16">CONTACT US</span>
-        </a>
-        <span class="headerPipeFix">&nbsp;|&nbsp;</span>
-        <a href="/client" class="socialMarginFix grayText letterSpace1" title="Login">
-            <span class="font12 margintop5">LOGIN</span>
-        </a>
-      </span>
-      </span>
+        <div class="floatright">
+          <a href="/about" class="grayText" title="About Us">
+              <span class="font16">ABOUT US</span>
+          </a>
+          <span class="headerPipeFix">&nbsp;|&nbsp;</span>
+          <a href="/press" class="grayText" title="Press">
+              <span class="font16">PRESS</span>
+          </a>
+          <span class="headerPipeFix">&nbsp;|&nbsp;</span>
+          <a href="/contact" class="grayText" title="Contact The Steel Company">
+              <span class="font16">CONTACT US</span>
+          </a>
+          <span class="headerPipeFix">&nbsp;|&nbsp;</span>
+          <a href="/client" class="socialMarginFix grayText letterSpace1" title="Login">
+              <span class="font12 margintop5">LOGIN</span>
+          </a>
+        </div>
+      </div>
   </div>
   {% block page %}
   {% endblock page %}
