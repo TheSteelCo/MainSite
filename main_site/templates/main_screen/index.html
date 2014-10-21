@@ -1,14 +1,5 @@
-<html>
-<head>
-  <title>{% block title %}The Steel Company {% endblock title %}</title>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8" >
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  {% include 'css.html' %}
-  {%- block extra_css -%}
-  {%- endblock -%}
-  {% include 'js.html' %}
-  {%- block extra_js -%}
-  {%- endblock -%}
+{% extends 'main_screen/base.html' %}
+{% block extra_css %}  
   <style>
   select {
     vertical-align: top;
@@ -94,46 +85,49 @@
     margin-left: 20px;
     width: 100px;
   }
+  .caret.caret-reversed {
+    border-top-width: 0px;
+    border-bottom: 4px solid #000000;
+  }  
   </style>
-</head>
-
-<body>
-    <div class="grayText">
-      <a href={{ url_for('index') }} class="pull-left"><img src={{ url_for('static', filename="img/steel_logo_gray_small.png") }} alt="The Steel Company" border="0" /></a>
-      <div class="pull-right">Michael.Villalobos.Jr@gmail.com<a class="logout" href="#">log out</a></div>
-      <br><br>
-      <ul class="nav nav-tabs">
-        <li class="active">
-          <a href="#">General</a>
-        </li>
-        <li>
-          <a href="#">Hot List</a>
-        </li>
-        <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Admin
-          <i class="icon-chevron-down icon-white"></i></a>
-          <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-            <li class="text-left"><a href="#">Manage Users</a></li>
-            <li class="text-left"><a href="#">Data Upload</a></li>
-          </ul>
-        </li>
-      </ul>
-    </div>
+  {% endblock %}
+  {% block extra_js %}
+  <script>
+    var viewModelInstance = null;
+    window.getViewModel = function () {
+      return viewModelInstance;
+    }
+    window.setViewModel = function ( newViewModeLinstance ) {
+      viewModelInstance = newViewModeLinstance;
+      ko.applyBindings( viewModelInstance );
+    }
+    $(document).ready(function(){
+      setViewModel(new dataViewModel());
+    });
+    var MAIN_PAGE = "{{ url_for('main') }}";
+    var loadTitlesURL = "{{ url_for('titles.load_titles') }}";
+  </script>
+{% endblock %}
+{% block page %}
     <div>
       <div class="contents">
         <div class="pull-left searchBox">
-          <select class="search-select"><option>Title</option>><option>Company</option><option>Genre</option></select>
-          <input type="search" placeholder="Search" class="input-large">
-          <a class="btn btn-search" data-bind="click: saveNewPassword"><i class="icon-search"></i></a>
+          <select data-bind="options: categories, value: selectedSearch" class="search-select"></select>
+          <input type="search" placeholder="Search" class="input-large" data-bind="value: searchTerm">
+          <a class="btn btn-search" data-bind="click: runSearch"><i class="icon-search"></i></a>
         </div>
+        <h3 class="text-center span4" data-bind="visible: isHotList() === false">General List</h3>
+        <h3 class="text-center span4" data-bind="visible: isHotList() === true">Hot List</h3>
         <div class="pull-right pagination pagination-small">
-          <span class="results">Showing 1-20 of 500 results</span>
+          <span class="results" data-bind="text: resultsText"></span>
           <ul>
-            <li class="disabled"><a href="#"><<</a></li>
-            <li class="active"><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">>></a></li>
+            <li data-bind="css: {active: currentPage() === 1}"}><a href="#" data-bind="click: goToFirstPage"><<</a></li>
+            <li data-bind="css: {active: currentPage() === 1}"}><a href="#" data-bind="click: decrementPage"><</a></li>
+            <!-- ko foreach: paginationValues -->
+            <li data-bind="css: {active: $root.currentPage() === $data}"><a href="#" data-bind="text: $data, click: function() {$root.setPage($data)}"></a></li>
+            <!-- /ko -->
+            <li data-bind="css: {active: currentPage() >= maxPages()}"><a href="#" data-bind="click: incrementPage">></a></li>
+            <li data-bind="css: {active: currentPage() >= maxPages()}"}><a href="#" data-bind="click: goToLastPage">>></a></li>
           </ul>
         </div>
         <div class="clearfix"></div>
@@ -141,46 +135,36 @@
           <div class="row span12 report-header">
             <div class="span3 leftmost">
               <div class="pull-left">
-                <a href="#" class="sort">Company</a>
+                <a href="#" class="sort" data-bind="css: {'sort-select': selectedSort() === 'Company'}, click: function() {categoryClicked('Company')}">Company <b style="vertical-align: middle;" data-bind="visible: selectedSort() === 'Company', css: caretDirection"></b></a>
               </div>
             </div>
             <div class="span4">
               <div class="pull-left">
-                <a href = "#" class="sort sort-select">Title <b class="caret" style="vertical-align: middle;"></b></a>
+                <a href = "#" class="sort" data-bind="css: {'sort-select': selectedSort() === 'Title'}, click: function() {categoryClicked('Title')}">Title <b style="vertical-align: middle;" data-bind="visible: selectedSort() === 'Title', css: caretDirection"></b></a>
               </div>
             </div>
             <div class="span2">
               <div class="pull-left">
-                <a href="#" class="sort">Genre</a>
+                <a href="#" class="sort" data-bind="css: {'sort-select': selectedSort() === 'Genre'}, click: function() {categoryClicked('Genre')}">Genre <b style="vertical-align: middle;" data-bind="visible: selectedSort() === 'Genre', css: caretDirection"></b></a>
               </div>
             </div>
             <div class="span2 pull-right text-right">
-              <a href="#" class="sort">Status</a>
+              <a href="#" class="sort" data-bind="css: {'sort-select': selectedSort() === 'Status'}, click: function() {categoryClicked('Status')}">Status <b style="vertical-align: middle;" data-bind="visible: selectedSort() === 'Status', css: caretDirection"></b></a>
             </div>
           </div>
           <br>
+          <!-- ko foreach: loadedTitles -->
           <div class="row span12 report-body search-item">
-            <div class="span3 leftmost"><span class="pull-left"><b>EXCLUSIVE MEDIA</b> <a class="imdb-link" href="#">[imdb]</a></span></div>
-            <div class="span4"><span class="pull-left"><b>1 (FORMULA ONE PROJECT)</b></span></div>
-            <div class="span2"><span class="pull-left"><i>Documentary</i></span></div>
-            <div class="span2 pull-right text-right">Completed</div>
-            <div class="row span 12 notes">
-            Prod: Nigel Sinclair ("End of Watch", "George Harrison: Living in the Material World"), Michael Shevloff ("La Cucaracha", "Bandwagon"). Dir: Paul Crowder ("Last Play at Shea", "Once in a Lifetime: The Extraordinary Story of the New York Cosmos"). Writer: Mark Monroe ("Chasing Ice", "Last Play at Shea"). Cast (voice over): Michael Fassbender: "Xmen: First Class", "Prometheus"). Story: A documentary that follows the lives of several renowned formula one racers. USA: Not set.
+            <div class="span3 leftmost"><span class="pull-left"><b data-bind="text: mvCompany"></b></span></div>
+            <div class="span4"><span class="pull-left"><b data-bind="text: mvTitle"></b>  <a class="imdb-link" target="none" data-bind="attr: {href: imdbSearch}">[imdb]</a></span></div>
+            <div class="span2"><span class="pull-left"><i data-bind="text: mvGenre"></i></span></div>
+            <div class="span2 pull-right text-right" data-bind="text: mvStatus"></div>
+            <div class="row span 12 notes" data-bind="text: mvDescription">
             </div>
-            <div class="span3 text-left">(200,000)</div>
+            <div class="span3 text-left" data-bind="text: mvCount"></div>
           </div>
-          <div class="row span12 report-body search-item">
-            <div class="span3 leftmost"><span class="pull-left"><b>EUROPA</b> <a class="imdb-link" href="#">[imdb]</a></span></div>
-            <div class="span4"><span class="pull-left"><b>108 DEMON KING</b></span></div>
-            <div class="span2"><span class="pull-left"><i>Comedy/Animation/3d</i></span></div>
-            <div class="span2 pull-right text-right">In production</div>
-            <div class="row span 12 notes">
-            Prod: Fundamental ("The Family"), Same Player ("Bienvenue  bord", "Protger et servir"). Dir: Pascal Morelli ("The Busy World of Richard Scarry"-TV). Writer: Pascal Morelli (no writing credits), Jean Pecheux (no credits). Story: A young prince in 11th century China must help to defeat the armies of the imperial tyranny Regent Gao-le Bel. USA: not set.
-            </div>
-            <div class="span3 text-left">(avail)</div>
-          </div>
+          <!-- /ko -->
         </div>
       </div>
     </div>
-</body>
-</html>
+{% endblock %}
