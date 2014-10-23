@@ -1,25 +1,21 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, g, jsonify
+from main_site.models import GeneralList
 
 titles = Blueprint('titles', __name__)
 
+
 @titles.route('/loadtitles', methods=['GET'])
 def load_titles():
-	returnTitles = [
-	{
-		'mvCompany': 'company a',
-		'mvTitle': 'title a',
-		'mvGenre': 'genre a',
-		'mvStatus': 'status a',
-		'mvDescription': 'description a',
-		'mvCount': 'count a'
-	},
-	{
-		'mvCompany': 'company z',
-		'mvTitle': 'title z',
-		'mvGenre': 'genre z',
-		'mvStatus': 'status z',
-		'mvDescription': 'description z',
-		'mvCount': 'count z'
-	}
-	]
-	return jsonify(titles=returnTitles)
+    items = g.db.query(GeneralList).all()
+    returnTitles = []
+    for item in items:
+        ser = item.serialize()
+        returnTitles.append({
+            'mvCompany': ser.get('company'),
+            'mvTitle': ser.get('title'),
+            'mvGenre': ser.get('genre'),
+            'mvStatus': ser.get('status'),
+            'mvDescription': ser.get('notes'),
+            'mvCount': 'count a'
+        })
+    return jsonify(titles=returnTitles)
