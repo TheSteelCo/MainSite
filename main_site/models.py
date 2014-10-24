@@ -18,6 +18,15 @@ class GeneralList(SteelCoSchema, Base):
     status = Column(Text)
     notes = Column(Text)
 
+    def __init__(self, code='', title='', genre='', company='',
+                 status='', notes=''):
+        self.code = code
+        self.title = title
+        self.genre = genre
+        self.company = company
+        self.status = status
+        self.notes = notes
+
     def serialize(self):
         return dict(
             code=self.code,
@@ -26,6 +35,9 @@ class GeneralList(SteelCoSchema, Base):
             company=self.company,
             status=self.status,
             notes=self.notes)
+
+    def __repr__(self):
+        return '<models.GeneralList({})>'.format(self.code)
 
 
 class GeneralListRegions(SteelCoSchema, Base):

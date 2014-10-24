@@ -2,8 +2,8 @@
 {% block page %}
 <div class="contents">
 	<h3>Select the file you wish to upload</h3>
-	<form>
-		<input type="file" name="tab">
+	<form action="{{ url_for('titles.import_general_list') }}" method="POST" enctype="multipart/form-data">
+		<input type="file" name="file">
 		<input type="submit">
 	</form>
 </div>
