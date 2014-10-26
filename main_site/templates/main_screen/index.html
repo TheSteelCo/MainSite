@@ -21,7 +21,9 @@
   }
   .contents {
     background-color: #CCCCCC;
-    height: 1200px;
+    min-height: 600px;
+    height: auto !important ;
+    height: 600%;
   }
   .nav {
     margin-bottom: 1px;
@@ -74,10 +76,13 @@
   .pagination a {
     color: #333333;
   }
+  .bottom-pagination{
+    margin-top: 10px;
+  }
   .results {
     font-size: 12px;
     margin-left: 20px;
-    vertical-align: middle;
+    vertical-align: 5px;
     height: 30px;
   }
   .search-select {
@@ -110,7 +115,7 @@
 {% endblock %}
 {% block page %}
     <div>
-      <div class="contents">
+      <div class="contents" id="contents">
         <div class="pull-left searchBox">
           <select data-bind="options: categories, value: selectedSearch" class="search-select"></select>
           <input type="search" placeholder="Search" class="input-large" data-bind="value: searchTerm">
@@ -118,7 +123,7 @@
         </div>
         <h3 class="text-center span4" data-bind="visible: isHotList() === false">General List</h3>
         <h3 class="text-center span4" data-bind="visible: isHotList() === true">Hot List</h3>
-        <div class="pull-right pagination pagination-small">
+        <div class="pull-right pagination pagination-small" data-bind="visible: numberOfResults() > 0">
           <span class="results" data-bind="text: resultsText"></span>
           <ul>
             <li data-bind="css: {active: currentPage() === 1}"}><a href="#" data-bind="click: goToFirstPage"><<</a></li>
@@ -132,7 +137,7 @@
         </div>
         <div class="clearfix"></div>
         <div class="container col-centered">
-          <div class="row span12 report-header">
+          <div class="row span12 report-header" data-bind="visible: numberOfResults() > 0">
             <div class="span3 leftmost">
               <div class="pull-left">
                 <a href="#" class="sort" data-bind="css: {'sort-select': selectedSort() === 'Company'}, click: function() {categoryClicked('Company')}">Company <b style="vertical-align: middle;" data-bind="visible: selectedSort() === 'Company', css: caretDirection"></b></a>
@@ -153,17 +158,36 @@
             </div>
           </div>
           <br>
+          <div class="row span12" data-bind="visible: loadingResults()">
+            <h4>Loading Titles...</h3>
+          </div>
+          <div class="row span12" data-bind="visible: !loadingResults() && numberOfResults() === 0">
+            <h4>No Results</h3>
+          </div>
           <!-- ko foreach: loadedTitles -->
-          <div class="row span12 report-body search-item">
-            <div class="span3 leftmost"><span class="pull-left"><b data-bind="text: mvCompany"></b></span></div>
-            <div class="span4"><span class="pull-left"><b data-bind="text: mvTitle"></b>  <a class="imdb-link" target="none" data-bind="attr: {href: imdbSearch}">[imdb]</a></span></div>
-            <div class="span2"><span class="pull-left"><i data-bind="text: mvGenre"></i></span></div>
+          <div class="row span12 report-body search-item" data-bind="visible: !$root.loadingResults()" id="titles">
+            <div class="span3 leftmost"><span class="pull-left text-left"><b data-bind="text: mvCompany"></b></span></div>
+            <div class="span4"><span class="pull-left text-left"><b data-bind="text: mvTitle"></b>  <a class="imdb-link" target="none" data-bind="attr: {href: imdbSearch}">[imdb]</a></span></div>
+            <div class="span2"><span class="pull-left text-left"><i data-bind="text: mvGenre"></i></span></div>
             <div class="span2 pull-right text-right" data-bind="text: mvStatus"></div>
             <div class="row span 12 notes" data-bind="text: mvDescription">
             </div>
-            <div class="span3 text-left" data-bind="text: mvCount"></div>
+            <div class="span3 text-left">(<span data-bind="text: mvCount"></span>)</div>
           </div>
           <!-- /ko -->
+          <div class="clearfix"></div>
+          <div class="pagination pagination-small bottom-pagination" data-bind="visible: numberOfResults() > 0">
+            <span class="results" data-bind="text: resultsText"></span>
+            <ul>
+              <li data-bind="css: {active: currentPage() === 1}"}><a href="#" data-bind="click: goToFirstPage"><<</a></li>
+              <li data-bind="css: {active: currentPage() === 1}"}><a href="#" data-bind="click: decrementPage"><</a></li>
+              <!-- ko foreach: paginationValues -->
+              <li data-bind="css: {active: $root.currentPage() === $data}"><a href="#" data-bind="text: $data, click: function() {$root.setPage($data)}"></a></li>
+              <!-- /ko -->
+              <li data-bind="css: {active: currentPage() >= maxPages()}"><a href="#" data-bind="click: incrementPage">></a></li>
+              <li data-bind="css: {active: currentPage() >= maxPages()}"}><a href="#" data-bind="click: goToLastPage">>></a></li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>

@@ -1,5 +1,6 @@
-from sqlalchemy import (Column, Text)
+from sqlalchemy import (Column, ForeignKey, Text)
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
 
 Base = declarative_base()
 
@@ -18,6 +19,8 @@ class GeneralList(SteelCoSchema, Base):
     status = Column(Text)
     notes = Column(Text)
 
+    regions = relationship("GeneralListRegions", backref="general_list")
+
     def __init__(self, code='', title='', genre='', company='',
                  status='', notes=''):
         self.code = code
@@ -28,13 +31,18 @@ class GeneralList(SteelCoSchema, Base):
         self.notes = notes
 
     def serialize(self):
+        ser_regions = []
+        for region in self.regions:
+            ser_regions.append(dict(region=region.region, avail=region.avail, notes=region.notes))
         return dict(
             code=self.code,
             title=self.title,
             genre=self.genre,
             company=self.company,
             status=self.status,
-            notes=self.notes)
+            notes=self.notes,
+            regions=ser_regions
+            )
 
     def __repr__(self):
         return '<models.GeneralList({})>'.format(self.code)
@@ -43,7 +51,7 @@ class GeneralList(SteelCoSchema, Base):
 class GeneralListRegions(SteelCoSchema, Base):
     __tablename__ = 'general_list_regions'
 
-    code = Column(Text, primary_key=True)
+    code = Column(Text, ForeignKey(GeneralList.code), primary_key=True)
     region = Column(Text, primary_key=True)
     avail = Column(Text)
     notes = Column(Text)

@@ -20,8 +20,9 @@ dataViewModel = function (_super) {
 	self.selectedSearch = ko.observable('Title');
 	self.searchTerm = ko.observable('');
 	self.currentPage = ko.observable(1);
-	self.numberOfResults = ko.observable(183);
+	self.numberOfResults = ko.observable(0);
 	self.isHotList = ko.observable(false);
+	self.loadingResults = ko.observable(false);
 	self.maxPages = ko.computed(function() {
 		return Math.ceil(self.numberOfResults() / 20);
 	});
@@ -64,6 +65,8 @@ dataViewModel = function (_super) {
 		else
 			self.ascendingDescending('a');
 			self.selectedSort(category);
+		self.currentPage(1);
+		self.loadTitles();
 	}
 
 	self.toggleAscDesc = function() {
@@ -74,11 +77,15 @@ dataViewModel = function (_super) {
 	}
 
 	self.setPage = function(page) {
-		console.log(page);
-		if (page >= 1 && page <= self.maxPages())
-			self.currentPage(parseInt(page));
+		var previousPage = self.currentPage();
+		page = parseInt(page)
+		if (page != self.currentPage()) {
+			if (page >= 1 && page <= self.maxPages()) {
+				self.currentPage(parseInt(page));
+				self.loadTitles();
+			}
+		}
 	}
-
 	self.incrementPage = function() {
 		self.setPage(self.currentPage()+1);
 	}
@@ -96,15 +103,14 @@ dataViewModel = function (_super) {
 	}, self);
 
 	self.runSearch = function() {
-		console.log('Search on category: ' + self.selectedSearch() + ' - ' + self.searchTerm());
-		console.log('I swear theres going to be a search here');
+		self.loadTitles();
 	}
 
 	self.setHotList = function(isHotList) {
 		self.isHotList(isHotList);
 	}
-
 	self.loadTitles = function() {
+		self.loadingResults(true);
 		ajaxParams = {
 			url: loadTitlesURL,
 			type: 'GET', 
@@ -116,21 +122,31 @@ dataViewModel = function (_super) {
 				selectedSearch: self.selectedSearch(),
 				searchTerm: self.searchTerm()
 			},
-			success: self.titleCallback
+			success: self.titleCallback,
+			error: self.titleCallbackError
 		};
+
 		return $.ajax(ajaxParams);
 	};
 	self.titleCallback = function(response) {
-		console.log(response);
 		var titles, title;
 		titles = response.titles;
 		self.loadedTitles([]);
 		for(i = 0; i < titles.length; i++){
 			title = new Title(titles[i]);
 			self.loadedTitles.push(Title(title));
+			console.log(titles[i]);
 		}
-		self.numberOfResults(titles.length);
-	}
+		self.numberOfResults(response.results);
+		$('#contents').height = $('#titles').position().top+$('#titles').position().outerHeight;
+		self.loadingResults(false);
+	};
+
+	self.titleCallbackError = function(response) {
+		self.loadedTitles([]);
+		self.numberOfResults(0);
+		self.loadingResults(false);
+	};
 	self.loadTitles();
 };
 }).call(this);
