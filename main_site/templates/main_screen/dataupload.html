@@ -1,10 +1,52 @@
 {% extends 'main_screen/base.html' %}
+{% block extra_js %}
+<script type="text/javascript">
+	$(function(){
+		$('#form').submit(function(e) {
+			$('#form').hide();
+			$('#uploading').show();
+			console.log($(this).serialize());
+			$.ajax({
+				type: 'POST',
+				url: $(this).attr('action'),
+				data: new FormData(this),
+				processData: false,
+				contentType: false,
+				success: function(json) {				
+					$('#uploading').hide();
+					if (json.message == 'success') {
+						$('#success').show();
+					}
+					else {
+						$('#error').show();
+						$('#form').show();
+					}
+				},
+				error: function(e) {
+					console.log(e);
+					$('#uploading').hide();
+					$('#form').show();
+					$('#error').show();
+				}
+			});
+			e.preventDefault();
+			return false;
+		});
+	});
+</script>
+{% endblock %}
 {% block page %}
 <div class="contents">
-	<h3>Select the file you wish to upload</h3>
-	<form action="{{ url_for('titles.import_general_list') }}" method="POST" enctype="multipart/form-data">
-		<input type="file" name="file">
-		<input type="submit">
+	<h3>File Upload</h3>
+	<form action="{{ url_for('titles.import_lists') }}" method="POST" enctype="multipart/form-data" id="form">
+		<label>General List</label>
+		<input type="file" name="general"><br>
+		<label>Hot List</label>
+		<input type="file" name="hotlist"><br>
+		<input type="submit" id="submit">
 	</form>
+	<div hidden="true" id="uploading">Your files are uploading. This may take a few minutes, do not close the browser.</div>
+	<div hidden="true" id="success">Your files have successfully uploaded!</div>
+	<div hidden="true" id="error">There was an error when attempting to upload your files. Please check that you have the correct files and try again.</div>
 </div>
 {% endblock %}

@@ -108,9 +108,11 @@ dataViewModel = function (_super) {
 
 	self.setHotList = function(isHotList) {
 		self.isHotList(isHotList);
+		self.loadTitles();
 	}
 	self.loadTitles = function() {
 		self.loadingResults(true);
+		self.numberOfResults(0);
 		ajaxParams = {
 			url: loadTitlesURL,
 			type: 'GET', 
@@ -147,6 +149,5 @@ dataViewModel = function (_super) {
 		self.numberOfResults(0);
 		self.loadingResults(false);
 	};
-	self.loadTitles();
 };
 }).call(this);
