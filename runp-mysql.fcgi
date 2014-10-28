@@ -5,7 +5,7 @@ import os
 os.environ['DATABASE_URL'] = 'mysql://apps:apps@localhost/apps'
 
 from flipflop import WSGIServer
-from app import app
+from main_site import app
 
 if __name__ == '__main__':
     WSGIServer(app).run()
