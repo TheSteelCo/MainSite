@@ -14,6 +14,7 @@ if os.environ.get('DATABASE_URL') is None:
 else:
     SQL_ALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
 
+
 def checkout_listener(dbapi_con, con_record, con_proxy):
     try:
         try:
