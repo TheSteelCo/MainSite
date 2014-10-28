@@ -4,6 +4,7 @@ import MySQLdb
 import StringIO
 
 from flask import Blueprint, g, jsonify, request
+from flask.ext.login import current_user
 from main_site.models import GeneralList, GeneralListRegions, HotList, HotListRegions
 from sqlalchemy import func
 
@@ -38,27 +39,27 @@ def load_titles():
     if searchTerm == '':
         items = g.db.query(listTable, regionTable.notes)\
                     .join(listTable.regions)\
-                    .filter(regionTable.region == 'usa', regionTable.avail == 'a')\
+                    .filter(regionTable.region == current_user.region, regionTable.avail == 'a')\
                     .order_by(orderby)\
-                    .slice((int(page)-1) * 20, int(page) * 20)\
+                    .slice((int(page) - 1) * 20, int(page) * 20)\
                     .all()
         total_results = g.db.query(func.count(listTable.code))\
-                    .join(listTable.regions)\
-                    .filter(regionTable.region == 'usa', regionTable.avail == 'a')\
-                    .scalar()
+            .join(listTable.regions)\
+            .filter(regionTable.region == current_user.region, regionTable.avail == 'a')\
+            .scalar()
     else:
         items = g.db.query(listTable, regionTable.notes)\
                     .filter(getattr(listTable, selectedSearch).like("%" + searchTerm + "%"))\
                     .join(listTable.regions)\
-                    .filter(regionTable.region == 'usa', regionTable.avail == 'a')\
+                    .filter(regionTable.region == current_user.region, regionTable.avail == 'a')\
                     .order_by(orderby)\
-                    .slice((int(page)-1) * 20, int(page) * 20)\
+                    .slice((int(page) - 1) * 20, int(page) * 20)\
                     .all()
         total_results = g.db.query(func.count(listTable.code))\
-                    .filter(getattr(listTable, selectedSearch).like("%" + searchTerm + "%"))\
-                    .join(listTable.regions)\
-                    .filter(regionTable.region == 'usa', regionTable.avail == 'a')\
-                    .scalar()
+            .filter(getattr(listTable, selectedSearch).like("%" + searchTerm + "%"))\
+            .join(listTable.regions)\
+            .filter(regionTable.region == current_user.region, regionTable.avail == 'a')\
+            .scalar()
     returnTitles = []
     for item in items:
         ser = item[0].serialize()
