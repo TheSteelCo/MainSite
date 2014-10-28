@@ -5,7 +5,6 @@
 		$('#form').submit(function(e) {
 			$('#form').hide();
 			$('#uploading').show();
-			console.log($(this).serialize());
 			$.ajax({
 				type: 'POST',
 				url: $(this).attr('action'),

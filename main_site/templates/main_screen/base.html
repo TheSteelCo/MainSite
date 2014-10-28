@@ -16,17 +16,17 @@
       <div class="pull-right">Michael.Villalobos.Jr@gmail.com<a class="logout" href="#">log out</a></div>
       <br><br>
       <ul class="nav nav-tabs">
-        <li data-bind="css: {active: isHotList() === false}">
-          <a href="#" data-bind="click: function() {setHotList(false);}">General</a>
+        <li>
+          <a href="#">General</a>
         </li>
-        <li data-bind="css: {active: isHotList() === true}">
-          <a href="#" data-bind="click: function() {setHotList(true);}">Hot List</a>
+        <li>
+          <a href="#">Hot List</a>
         </li>
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Admin
           <i class="icon-chevron-down icon-white"></i></a>
           <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-            <li class="text-left"><a href="#">Manage Users</a></li>
+            <li class="text-left"><a href={{ url_for('main_users') }}>Manage Users</a></li>
             <li class="text-left"><a href={{ url_for('main_upload') }}>Data Upload</a></li>
           </ul>
         </li>

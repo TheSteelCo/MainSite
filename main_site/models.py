@@ -1,12 +1,48 @@
-from sqlalchemy import (Column, ForeignKey, Text)
+from sqlalchemy import (Boolean, Column, ForeignKey, Integer, Text)
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
+
+from main_site.utils import decrypt, encrypt
 
 Base = declarative_base()
 
 
 class SteelCoSchema(object):
     __table_args__ = {'schema': 'thesteelco'}
+
+
+class Users(SteelCoSchema, Base):
+    __tablename__ = 'users'
+
+    id = Column(Integer, primary_key=True)
+    username = Column(Text)
+    password = Column(Text)
+    region = Column(Text)
+    admin = Column(Boolean)
+
+    def __init__(self, username='', password='', region='', admin=''):
+        self.username = username
+        if password != '':
+            self.password = encrypt(password)
+        else:
+            self.password = ''
+        self.region = region
+        self.admin = admin
+
+    def check_password(self, password):
+        return password == decrypt(self.password)
+
+    def set_password(self, newPassword):
+        self.password = encrypt(newPassword)
+
+    def serialize(self):
+        return dict(
+            id=self.id,
+            username=self.username,
+            password=decrypt(self.password),
+            region=self.region,
+            admin=self.admin
+        )
 
 
 class GeneralList(SteelCoSchema, Base):
@@ -42,7 +78,7 @@ class GeneralList(SteelCoSchema, Base):
             status=self.status,
             notes=self.notes,
             regions=ser_regions
-            )
+        )
 
     def __repr__(self):
         return '<models.GeneralList({})>'.format(self.code)
@@ -90,7 +126,7 @@ class HotList(SteelCoSchema, Base):
             status=self.status,
             notes=self.notes,
             regions=ser_regions
-            )
+        )
 
     def __repr__(self):
         return '<models.HotList({})>'.format(self.code)

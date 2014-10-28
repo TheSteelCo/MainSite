@@ -12,7 +12,7 @@ Title = function(args) {
 	self.imdbSearch = "http://www.imdb.com/find?q=" + encodeURIComponent(self.mvTitle);
 };
 
-dataViewModel = function (_super) {
+dataViewModel = function () {
 	var self = this;
 	self.categories = ko.observableArray(['Company', 'Title', 'Genre', 'Status']);
 	self.selectedSort = ko.observable('Title');
@@ -110,6 +110,7 @@ dataViewModel = function (_super) {
 		self.isHotList(isHotList);
 		self.loadTitles();
 	}
+	
 	self.loadTitles = function() {
 		self.loadingResults(true);
 		self.numberOfResults(0);
@@ -127,9 +128,9 @@ dataViewModel = function (_super) {
 			success: self.titleCallback,
 			error: self.titleCallbackError
 		};
-
 		return $.ajax(ajaxParams);
 	};
+
 	self.titleCallback = function(response) {
 		var titles, title;
 		titles = response.titles;

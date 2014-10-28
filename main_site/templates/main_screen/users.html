@@ -1,0 +1,135 @@
+{% extends 'main_screen/base.html' %}
+{% block extra_css %}  
+  <style>
+  body .modal {
+    width: 400px;
+    margin-left: -175px;
+    margin-top: 100px;
+  }
+  </style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    var viewModelInstance = null;
+    window.getViewModel = function () {
+      return viewModelInstance;
+    }
+    window.setViewModel = function ( newViewModeLinstance ) {
+      viewModelInstance = newViewModeLinstance;
+      ko.applyBindings( viewModelInstance );
+    }
+    $(document).ready(function(){
+      setViewModel(new usersModel());
+      getViewModel().loadUsers();
+    });
+    var loadUsersURL = "{{ url_for('users.get_users') }}";
+    var addUsersURL = "{{ url_for('users.add_user') }}";
+    var editUsersURL = "{{ url_for('users.edit_user') }}";
+    var deleteUserURL = "{{ url_for('users.delete_user') }}";
+</script>
+{% endblock %}
+
+{% block page %}
+    <div class='contents'>
+        <div class="row center">
+            <h3>Users            
+            </h3>
+        </div>
+        <button data-toggle="modal" data-target="#addUser">Add User</button><br><br>
+        <center>
+        <table>
+            <tr>
+                <th>Username</th>
+                <th>Password</th>
+                <th>Region</th>
+                <th>Admin</th>
+                <th></th>
+            </tr>
+            <!-- ko foreach: users -->
+            <tr>
+                <td data-bind="text: username"></td>
+                <td data-bind="text: password"></td>
+                <td data-bind="text: region"></td>
+                <td data-bind="text: admin ? 'Yes' : 'No'"></td>
+                <td>
+                    <a class="btn btn-delete" data-bind="click: $parent.selectUser" data-toggle="modal" data-target="#editUser"><i class="icon-pencil"></i></a>
+                    <a class="btn btn-delete" data-bind="click: $parent.selectUser" data-toggle="modal" data-target="#deleteUser"><i class="icon-trash"></i></a>
+                </td>
+            </tr>
+            <!-- /ko -->            
+        </table>
+        </center>
+    </div>
+    <div class='modal fade' id="addUser" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class='modal-dialog'>
+            <div class='modal-content'>
+                <div class='modal-header'>
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Add User</h4>
+                </div>
+                <div class='modal-body'>
+                    <table>
+                    <tr><td><label class="text-right">Username</label></td><td><input type="input" name="username" id="username"></td></tr>
+                    <tr><td><label class="text-right">Password</label></td><td><input type="input" name="password" id="password"></td></tr>
+                    <tr><td><label class="text-right">Region</label></td><td><input type="input" name="region" id="region"></td></tr>
+                    <tr><td><label class="text-right">Is Admin?</label></td><td><input type="checkbox" name="admin" id="admin"></td></tr>
+                    </table>
+                </div>
+                <div class='modal-footer'>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" data-bind="click: addUser">Add User</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='modal fade' id="editUser" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class='modal-dialog'>
+            <div class='modal-content'>
+                <div class='modal-header'>
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Edit User</h4>
+                </div>
+                <div class='modal-body'>
+                    <!-- ko with: selectedUser -->
+                    <table>
+                    <tr><td><label class="text-right">Username</label></td><td><input type="input" disabled="true" data-bind="value: username"></td></tr>
+                    <tr><td><label class="text-right">Password</label></td><td><input type="input" name="edit-password" id="edit-password" data-bind="value: password"></td></tr>
+                    <tr><td><label class="text-right">Region</label></td><td><input type="input" name="edit-region" id="edit-region" data-bind="value: region"></td></tr>
+                    <tr><td><label class="text-right">Is Admin?</label></td><td><input type="checkbox" name="edit-admin" id="edit-admin" data-bind="checked: admin"></td></tr>
+                    </table>
+                    <!-- /ko -->
+                </div>
+                <div class='modal-footer'>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" data-bind="click: modifySelectedUser">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='modal fade' id="deleteUser" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class='modal-dialog'>
+            <div class='modal-content'>
+                <div class='modal-header'>
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Delete User</h4>
+                </div>
+                <div class='modal-body'>
+                    Are you sure you want to delete this user?
+                    <!-- ko with: selectedUser -->
+                    <table>
+                    <tr><td><label class="text-right">Username</label></td><td><input type="input" disabled="true" data-bind="value: username"></td></tr>
+                    <tr><td><label class="text-right">Password</label></td><td><input type="input" disabled="true" data-bind="value: password"></td></tr>
+                    <tr><td><label class="text-right">Region</label></td><td><input type="input" disabled="true" data-bind="value: region"></td></tr>
+                    <tr><td><label class="text-right">Is Admin?</label></td><td><input type="checkbox" disabled="true" data-bind="checked: admin"></td></tr>
+                    </table>
+                    <!-- /ko -->
+                </div>
+                <div class='modal-footer'>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" data-bind="click: deleteSelectedUser">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
