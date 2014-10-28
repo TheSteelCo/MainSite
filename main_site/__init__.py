@@ -64,7 +64,7 @@ def create_app(config=None):
             data = request.get_json(force=true)
             username = data.get('username')
             password = data.get('password')
-            user = db.query(Users).filter(func.lower(Users.username) == func.lower(username)).first()
+            user = get_db().query(Users).filter(func.lower(Users.username) == func.lower(username)).first()
             if user:
                 if user.check_password(password):
                     login_user(user)
