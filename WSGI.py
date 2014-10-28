@@ -1,5 +1,5 @@
 from main_site import app
 
 
-def appliction(env, start_response):
+def application(env, start_response):
     app.run()
