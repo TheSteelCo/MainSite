@@ -38,10 +38,18 @@
 <div class="contents">
 	<h3>File Upload</h3>
 	<form action="{{ url_for('titles.import_lists') }}" method="POST" enctype="multipart/form-data" id="form">
-		<label>General List</label>
-		<input type="file" name="general"><br>
-		<label>Hot List</label>
-		<input type="file" name="hotlist"><br>
+		<center>
+		<table>
+			<tr>
+				<td style="vertical-align: top">General List</td>
+				<td><input type="file" name="general"></td>
+			</tr>
+			<tr>
+				<td class="text-right" style="vertical-align: top">Hot List</td>
+				<td><input type="file" name="hotlist"></td>
+			</tr>
+		</table>
+	</center>
 		<input type="submit" id="submit">
 	</form>
 	<div hidden="true" id="uploading">Your files are uploading. This may take a few minutes, do not close the browser.</div>

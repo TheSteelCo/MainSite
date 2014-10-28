@@ -1,3 +1,5 @@
+from flask.ext.login import UserMixin
+
 from sqlalchemy import (Boolean, Column, ForeignKey, Integer, Text)
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
@@ -11,7 +13,7 @@ class SteelCoSchema(object):
     __table_args__ = {'schema': 'thesteelco'}
 
 
-class Users(SteelCoSchema, Base):
+class Users(SteelCoSchema, Base, UserMixin):
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True)

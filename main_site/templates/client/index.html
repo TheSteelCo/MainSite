@@ -1,6 +1,86 @@
 {% extends 'base.html' %}
 {% block extra_css %}
 <style type="text/css">
+body {
+  height: 1200px;
+  background: linear-gradient(gray, black);
+  /*background-color: #eee;*/
+}
+
+body, h1, p {
+  font-family: "Helvetica Neue", "Segoe UI", Segoe, Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: normal;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.container {
+  margin-left:  auto;
+  margin-right:  auto;
+  margin-top: 60px;
+  max-width: 1170px;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+.container2 {
+
+  margin-top: 80px;
+  max-width: 1170px;
+  padding-left: 230px;
+}
+
+.cornerlogo {
+      position: absolute;
+    top: 73px;
+    left: 220px;
+
+}
+
+
+.row:before, .row:after {
+  display: table;
+  content: " ";
+}
+
+h1 {
+  font-size: 48px;
+  color: white;
+  font-weight: bold;
+  margin: 0 0 20px 0;
+}
+
+h2 {
+  font-size: 24px;
+  color: white;
+  font-weight: 300;
+  margin: 0 0 20px 0;
+}
+
+h3 {
+  font-size: 18px;
+  color: white;
+line-height: 110%;
+}
+
+.lead {
+  font-size: 21px;
+  font-weight: 200;
+  margin-bottom: 20px;
+}
+
+p {
+  margin: 0 0 10px;
+}
+
+a {
+  color: #3282e6;
+  text-decoration: none;
+}
+a:link { color:#cccccc; }
+a:visited { color:white;  }
+a:hover { color:white;  }
 .control-group .control-label {
 	cursor: default;
 	vertical-align: text-top;
@@ -44,76 +124,27 @@
 {% endblock extra_js %}
 {% block page %}
 <div class="container grayText">
-  <div class="row">    
-      	<div class="span3 offset3 centered">
-			<div data-bind="visible: loginDisplay() == 0">
-			  	<form class="form-horizontal" id="login-form">
-			  		<fieldset class="login">
-			  			<h3>System Login</h3>
-				      	<div class="control-group">
-				  			<label class="control-label">Email:</label>
-					  		<input type="email" class="input-large" placeholder="Email" data-bind="value: userEmail">
-					  	</div>
-					  	<div class="control-group">
-					  		<label class="control-label">Password:</label>
-					  			<input type="password" class="input-large" placeholder="Password" data-bind="value: userPassword">
-					  	</div>
-					  	<div class="login-error" data-bind="visible: loginError, text: loginErrorText"></div>
-					  	<div class="control-group">
-					  		<a href="#" class="btn btn-small btn-login" data-bind="click: login">Login</a>
-					  	</div>
-					  	<div class="password">
-					  		Forgot your password? Click <a href="#" data-bind="click: passwordRecovery">here.</a>
-					  	</div>
-				  </fieldset>
-			    </form>
-			</div>
-			<div data-bind="visible: loginDisplay() == 1">
-			  	<form class="form-horizontal">
-			  		<fieldset class="login">
-			  			<h3>Reset Password</h3>
-				      	<div class="control-group">
-				  			<label class="control-label">Enter your Email:</label>
-					  		<input type="email" class="input-large" placeholder="Email" data-bind="value: userEmail">
-					  	</div>
-					  	<div class="login-error" data-bind="visible: loginError, text: loginErrorText"></div>
-					  	<div class="control-group">
-					  		<a href="#" class="btn btn-small btn-login" data-bind="click: resetPassword">Reset</a>
-					  	</div>
-					  	<div class="password">
-					  		Note: Clicking the button above will reset your password and send a temporary password to your email.
-					  	</div>
-				  </fieldset>
-			    </form>
-			</div>			
-			<div data-bind="visible: loginDisplay() == 2">
-			  	<form class="form-horizontal">
-			  		<fieldset class="login">
-			  			<h3>New Password</h3>
-				      	<div class="control-group">
-				  			<label class="control-label">Enter a new Password:</label>
-					  		<input type="password" class="input-large" placeholder="Email" data-bind="value: newPassword">
-					  	</div>
-				      	<div class="control-group">
-				  			<label class="control-label">Retype Password:</label>
-					  		<input type="password" class="input-large" placeholder="Email" data-bind="value: confirmPassword">
-					  	</div>
-					  	<div class="login-error" data-bind="visible: loginError, text: loginErrorText"></div>
-					  	<div class="control-group">
-					  		<a href="#" class="btn btn-small btn-login" data-bind="click: saveNewPassword">Save</a>
-					  	</div>
-					  	<div class="password password-new">
-					  		You must create a new password to continue.
-					  	</div>
-				  </fieldset>
-			    </form>
-			</div>
-		</div>
+  <div class="row">
+  	<center>
+	  	<form class="form-horizontal" action="" method="post">
+	  		{{ form.hidden_tag() }}
+	  		<fieldset class="login">
+	  			<h3>System Login</h3>
+		      	<div class="control-group">
+		  			<label class="control-label">Username:</label>
+			  		<input type="input" class="input-large" placeholder="Username" name="username">
+			  	</div>
+			  	<div class="control-group">
+			  		<label class="control-label">Password:</label>
+			  		<input type="password" class="input-large" placeholder="Password" name="password">
+			  	</div>
+			  	<div class="login-error" data-bind="visible: loginError, text: loginErrorText"></div>
+			  	<div class="control-group">
+			  		<input type="submit" value="login">
+			  	</div>
+		  </fieldset>
+	    </form>
+	</center>
 	</div>
 </div>
-<script>
-	var MAIN_PAGE = "{{ url_for('main') }}";
-	ko.applyBindings(new clientLoginModel());
-</script>
-
 {% endblock page %}

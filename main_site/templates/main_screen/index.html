@@ -103,6 +103,9 @@
     $(document).ready(function(){
       setViewModel(new dataViewModel());
       getViewModel().loadTitles();
+      {% if list=='hotlist'%}
+      getViewModel().isHotList(true);
+      {% endif %}
     });
     var MAIN_PAGE = "{{ url_for('main') }}";
     var loadTitlesURL = "{{ url_for('titles.load_titles') }}";
