@@ -7,12 +7,9 @@ from sqlalchemy import create_engine, event
 from sqlalchemy.exc import DisconnectionError
 from sqlalchemy.orm import scoped_session, sessionmaker
 
-KEY = '9ewguweigwebowieb89h'
+from config import SQLALCHEMY_DATABASE_URI
 
-if os.environ.get('DATABASE_URL') is None:
-    SQL_ALCHEMY_DATABASE_URI = 'mysql://dbsteelco:Royal72uk@thesteelco.com/thesteelco'
-else:
-    SQL_ALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
+KEY = '9ewguweigwebowieb89h'
 
 
 def checkout_listener(dbapi_con, con_record, con_proxy):
@@ -30,7 +27,7 @@ def checkout_listener(dbapi_con, con_record, con_proxy):
 
 def get_db():
     if not hasattr(current_app, 'db'):
-        engine = create_engine(SQL_ALCHEMY_DATABASE_URI, pool_size=100, pool_recycle=3000)
+        engine = create_engine(SQLALCHEMY_DATABASE_URI, pool_size=100, pool_recycle=3000)
         event.listen(engine, 'checkout', checkout_listener)
         db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
         current_app.db = db_session
