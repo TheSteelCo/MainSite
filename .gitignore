@@ -2,3 +2,4 @@
 
 # vagrant
 .vagrant/
+main_site/cgi-bin/
