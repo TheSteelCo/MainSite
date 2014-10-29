@@ -1,0 +1,58 @@
+<html>
+	<head>
+		<script src={{ url_for('static', filename='js/knockout.js') }} type=application/javascript></script>
+		<script src={{ url_for('static', filename='js/jquery-1.11.1.min.js') }} type=application/javascript></script>
+		<script src={{ url_for('static', filename='js/printable.js') }} type=application/javascript></script>
+		<link rel="stylesheet" href={{ url_for('static', filename="css/bootstrap.css") }} type="text/css">
+		<link rel="stylesheet" href={{ url_for('static', filename="css/bootstrap-responsive.css") }} type="text/css">
+	    <style>
+	    body {
+	    	font-size: 10px;
+	    }
+	    th {
+	    	text-decoration: underline;
+	    }
+	    </style>
+	    <script>
+	      var viewModelInstance = null;
+	      window.getViewModel = function () {
+	        return viewModelInstance;
+	      }
+	      window.setViewModel = function ( newViewModeLinstance ) {
+	        viewModelInstance = newViewModeLinstance;
+	        ko.applyBindings( viewModelInstance);
+  	      }
+	      $(document).ready(function(){
+	        setViewModel(new printerModel());
+	        getViewModel().loadParams();
+	        {% if list=='hotlist'%}
+	        getViewModel().isHotList(true);
+	        {% endif %}
+	        getViewModel().loadTitles();
+	      });
+	      var MAIN_PAGE = "{{ url_for('main') }}";
+	      var loadTitlesURL = "{{ url_for('titles.load_titles') }}";
+	    </script>		
+	</head>
+	<body style="font-size: small">
+		<table style="font-size: small">
+			<tr>
+				<th>Company</th>
+				<th>Title</th>
+				<th>Genre</th>
+				<th>Status</th>
+			</tr>
+		<!-- ko foreach: loadedTitles -->
+			<tr>
+				<td><span class="text-left"><b data-bind="text: mvCompany"></b></span></td>
+				<td><span class="text-left"><b data-bind="text: mvTitle"></b></span></td>
+            	<td><span class="text-left"><i data-bind="text: mvGenre"></i></span></td>
+            	<td><span class="text-right" data-bind="text: mvStatus"></span></td>
+            </tr>
+            <tr style="border-bottom-style: solid">
+            	<td colspan=4><span data-bind="text: mvDescription"></span> <b>(<span data-bind="text: mvCount"></span>)</b></td>
+            </tr>
+		<!-- /ko -->
+        </table>
+	</body>
+</html>

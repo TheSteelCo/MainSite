@@ -15,7 +15,7 @@ Title = function(args) {
 dataViewModel = function () {
 	var self = this;
 	self.categories = ko.observableArray(['Company', 'Title', 'Genre', 'Status']);
-	self.selectedSort = ko.observable('Title');
+	self.selectedSort = ko.observable('Company');
 	self.ascendingDescending = ko.observable('a');
 	self.selectedSearch = ko.observable('Title');
 	self.searchTerm = ko.observable('');
@@ -103,6 +103,13 @@ dataViewModel = function () {
 	}, self);
 
 	self.runSearch = function() {
+		self.currentPage(1);
+		self.loadTitles();
+	}
+
+	self.clearSearch = function() {
+		self.currentPage(1);
+		self.searchTerm('');
 		self.loadTitles();
 	}
 
@@ -131,6 +138,16 @@ dataViewModel = function () {
 		return $.ajax(ajaxParams);
 	};
 
+	self.printPage = function() {
+		data = {currentPage: self.currentPage(),
+				isHotList: self.isHotList(),
+				orderby: self.selectedSort(),
+				ascending: self.ascendingDescending(),
+				selectedSearch: self.selectedSearch(),
+				searchTerm: self.searchTerm()};
+		window.open(printPagesURL + '?' + jQuery.param(data));
+	}
+
 	self.titleCallback = function(response) {
 		var titles, title;
 		titles = response.titles;
@@ -138,7 +155,6 @@ dataViewModel = function () {
 		for(i = 0; i < titles.length; i++){
 			title = new Title(titles[i]);
 			self.loadedTitles.push(Title(title));
-			console.log(titles[i]);
 		}
 		self.numberOfResults(response.results);
 		$('#contents').height = $('#titles').position().top+$('#titles').position().outerHeight;
