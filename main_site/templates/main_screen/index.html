@@ -102,25 +102,29 @@
     }
     $(document).ready(function(){
       setViewModel(new dataViewModel());
-      getViewModel().loadTitles();
       {% if list=='hotlist'%}
       getViewModel().isHotList(true);
       {% endif %}
+      getViewModel().loadTitles();
     });
     var MAIN_PAGE = "{{ url_for('main') }}";
     var loadTitlesURL = "{{ url_for('titles.load_titles') }}";
+    var printPagesURL = "{{ url_for('titles.printable') }}"
   </script>
 {% endblock %}
 {% block page %}
     <div>
       <div class="contents" id="contents">
-        <div class="pull-left searchBox">
-          <select data-bind="options: categories, value: selectedSearch" class="search-select"></select>
-          <input type="search" placeholder="Search" class="input-large" data-bind="value: searchTerm">
-          <a class="btn btn-search" data-bind="click: runSearch"><i class="icon-search"></i></a>
+        <div class="span5">
+          <div class="pull-left searchBox" data-bind="visible: numberOfResults() > 0">
+            <select data-bind="options: categories, value: selectedSearch" class="search-select"></select>
+            <input type="search" placeholder="Search" class="input-large" data-bind="value: searchTerm">
+            <a class="btn btn-search" data-bind="click: runSearch"><i class="icon-search"></i></a>
+            <a class="btn" data-bind="click: clearSearch, visible: searchTerm() !== ''">Clear</a>
+          </div>
         </div>
-        <h3 class="text-center span4" data-bind="visible: isHotList() === false">General List</h3>
-        <h3 class="text-center span4" data-bind="visible: isHotList() === true">Hot List</h3>
+        <h3 class="text-center span3" data-bind="visible: isHotList() === false">General List</h3>
+        <h3 class="text-center span3" data-bind="visible: isHotList() === true">Hot List</h3>
         <div class="pull-right pagination pagination-small" data-bind="visible: numberOfResults() > 0">
           <span class="results" data-bind="text: resultsText"></span>
           <ul>
@@ -132,6 +136,7 @@
             <li data-bind="css: {active: currentPage() >= maxPages()}"><a href="#" data-bind="click: incrementPage">></a></li>
             <li data-bind="css: {active: currentPage() >= maxPages()}"}><a href="#" data-bind="click: goToLastPage">>></a></li>
           </ul>
+          <br><a class="btn pull-right" data-bind="visible: numberOfResults() > 0, click: printPage">Printable Page</a>
         </div>
         <div class="clearfix"></div>
         <div class="container col-centered">
@@ -170,7 +175,7 @@
             <div class="span2 pull-right text-right" data-bind="text: mvStatus"></div>
             <div class="row span 12 notes" data-bind="text: mvDescription">
             </div>
-            <div class="span3 text-left">(<span data-bind="text: mvCount"></span>)</div>
+            <div class="span3 text-left"><b>(<span data-bind="text: mvCount"></span>)</b></div>
           </div>
           <!-- /ko -->
           <div class="clearfix"></div>

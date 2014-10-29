@@ -3,7 +3,7 @@ import csv
 import MySQLdb
 import StringIO
 
-from flask import Blueprint, g, jsonify, request
+from flask import Blueprint, g, jsonify, render_template, request
 from flask.ext.login import current_user
 from main_site.models import GeneralList, GeneralListRegions, HotList, HotListRegions
 from sqlalchemy import func
@@ -64,8 +64,8 @@ def load_titles():
     for item in items:
         ser = item[0].serialize()
         returnTitles.append({
-            'mvCompany': ser.get('company'),
-            'mvTitle': ser.get('title'),
+            'mvCompany': ser.get('company').upper(),
+            'mvTitle': ser.get('title').upper(),
             'mvGenre': ser.get('genre'),
             'mvStatus': ser.get('status'),
             'mvDescription': ser.get('notes'),
@@ -81,6 +81,10 @@ def import_lists():
     else:
         return jsonify(dict(message='error'))
 
+@titles.route('/print', methods=['GET'])
+def printable():
+    return render_template('main_screen/printable.html')
+
 
 def _import_general_list(file):
     try:
@@ -91,6 +95,7 @@ def _import_general_list(file):
             insert_code = ""
             insert_region_code = ""
             regions = []
+            count = 0
             for line in output.getvalue().splitlines():
                 if firstline:
                     firstline = False
@@ -99,6 +104,10 @@ def _import_general_list(file):
                         regions.append(unicode(tabs[i], errors='replace').encode('ascii', 'replace'))
                 else:
                     if insert_code == "":
+                        insert_code = "INSERT INTO general_list_temp(code, title, genre, company, status, notes) VALUES "
+                        insert_region_code = "INSERT INTO general_list_regions_temp(code, region, avail, notes) VALUES "
+                    elif count % 100 == 0:
+                        _insert_list(insert_code, insert_region_code)
                         insert_code = "INSERT INTO general_list_temp(code, title, genre, company, status, notes) VALUES "
                         insert_region_code = "INSERT INTO general_list_regions_temp(code, region, avail, notes) VALUES "
 
@@ -118,16 +127,23 @@ def _import_general_list(file):
                                 MySQLdb.escape_string(unicode(tabs[i+1], errors='replace').encode('ascii', 'replace')),
                                 MySQLdb.escape_string(unicode(tabs[i], errors='replace').encode('ascii', 'replace'))
                             )
+                count = count + 1
             if insert_code != '':
-                g.db.execute(insert_code[:-2] + ';')
-                g.db.execute(insert_region_code[:-2] + ';')
+                _insert_list(insert_code, insert_region_code)
                 g.db.execute('DROP TABLE IF EXISTS general_list;')
                 g.db.execute('ALTER TABLE general_list_temp RENAME TO general_list;')
                 g.db.execute('DROP TABLE IF EXISTS general_list_regions;')
                 g.db.execute('ALTER TABLE general_list_regions_temp RENAME TO general_list_regions;')
         return True
-    except:
+    except Exception as ex:
         return False
+
+def _insert_list(insert_code, insert_region_code):
+    if insert_code != '':
+        g.db.execute(insert_code[:-2] + ';')
+        g.db.execute(insert_region_code[:-2] + ';')
+
+
 
 def _create_temp_general_table():
     g.db.execute('DROP TABLE IF EXISTS general_list_temp;')
@@ -157,6 +173,7 @@ def _import_hotlist(file):
             insert_code = ""
             insert_region_code = ""
             regions = []
+            count = 0
             for line in output.getvalue().splitlines():
                 if firstline:
                     firstline = False
@@ -165,6 +182,10 @@ def _import_hotlist(file):
                         regions.append(unicode(tabs[i], errors='replace').encode('ascii', 'replace'))
                 else:
                     if insert_code == "":
+                        insert_code = "INSERT INTO hot_list_temp(code, title, genre, company, status, notes) VALUES "
+                        insert_region_code = "INSERT INTO hot_list_regions_temp(code, region, avail, notes) VALUES "
+                    elif count % 100  == 0:
+                        _insert_list(insert_code, insert_region_code)
                         insert_code = "INSERT INTO hot_list_temp(code, title, genre, company, status, notes) VALUES "
                         insert_region_code = "INSERT INTO hot_list_regions_temp(code, region, avail, notes) VALUES "
 
@@ -184,9 +205,9 @@ def _import_hotlist(file):
                                 MySQLdb.escape_string(unicode(tabs[i+1], errors='replace').encode('ascii', 'replace')),
                                 MySQLdb.escape_string(unicode(tabs[i], errors='replace').encode('ascii', 'replace'))
                             )
+            count = count + 1
             if insert_code != '':
-                g.db.execute(insert_code[:-2] + ';')
-                g.db.execute(insert_region_code[:-2] + ';')
+                _insert_list(insert_code, insert_region_code)
                 g.db.execute('DROP TABLE IF EXISTS hot_list;')
                 g.db.execute('ALTER TABLE hot_list_temp RENAME TO hot_list;')
                 g.db.execute('DROP TABLE IF EXISTS hot_list_regions;')
