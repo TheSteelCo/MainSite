@@ -36,6 +36,7 @@ printerModel = function () {
 	self.isHotList = ko.observable(false);
 	self.loadingResults = ko.observable(false);
 	self.loadedTitles = ko.observableArray();
+	self.resultsPerPage = ko.observable(20);
 	
 	self.loadTitles = function() {
 		self.loadingResults(true);
@@ -48,7 +49,8 @@ printerModel = function () {
 				orderby: self.selectedSort(),
 				ascending: self.ascendingDescending(),
 				selectedSearch: self.selectedSearch(),
-				searchTerm: self.searchTerm()
+				searchTerm: self.searchTerm(),
+				resultsPerPage: self.resultsPerPage()
 			},
 			success: self.titleCallback,
 			error: self.titleCallbackError
@@ -79,6 +81,7 @@ printerModel = function () {
 		self.ascendingDescending($.QueryString["ascending"]);
 		self.selectedSearch($.QueryString["selectedSearch"]);
 		self.searchTerm($.QueryString["searchTerm"]);
+		self.resultsPerPage(parseInt($.QueryString["resultsPerPage"]));
 		self.loadTitles();
 	};
 };

@@ -79,6 +79,13 @@
     vertical-align: 5px;
     height: 30px;
   }
+  .resultsPerPage {
+    font-size: 12px;
+    margin-left: 20px;
+    vertical-align: middle;
+    height: 30px;
+    margin-top: 10px;
+  }  
   .search-select {
     margin-top: 8px;
     margin-left: 20px;
@@ -87,7 +94,20 @@
   .caret.caret-reversed {
     border-top-width: 0px;
     border-bottom: 4px solid #000000;
-  }  
+  }
+  .pagination {
+    margin-bottom: 5px;
+  }
+  .dropdown {
+    margin-right: 20px;
+  }
+  .printmenu {
+    width: 100px;
+    min-width: 100px;
+  }
+  .selectpicker {
+    width: 60px;
+  }
   </style>
   {% endblock %}
 {% block extra_js %}
@@ -116,27 +136,45 @@
     <div>
       <div class="contents" id="contents">
         <div class="span5">
-          <div class="pull-left searchBox" data-bind="visible: numberOfResults() > 0">
+          <div class="pull-left searchBox" data-bind="visible: !loadingResults()">
             <select data-bind="options: categories, value: selectedSearch" class="search-select"></select>
-            <input type="search" placeholder="Search" class="input-large" data-bind="value: searchTerm">
+            <input type="search" placeholder="Search" class="input-large" data-bind="value: searchTerm, valueUpdate: 'keyup', executeOnEnter: runSearch">
             <a class="btn btn-search" data-bind="click: runSearch"><i class="icon-search"></i></a>
             <a class="btn" data-bind="click: clearSearch, visible: searchTerm() !== ''">Clear</a>
           </div>
         </div>
         <h3 class="text-center span3" data-bind="visible: isHotList() === false">General List</h3>
         <h3 class="text-center span3" data-bind="visible: isHotList() === true">Hot List</h3>
-        <div class="pull-right pagination pagination-small" data-bind="visible: numberOfResults() > 0">
-          <span class="results" data-bind="text: resultsText"></span>
-          <ul>
-            <li data-bind="css: {active: currentPage() === 1}"}><a href="#" data-bind="click: goToFirstPage"><<</a></li>
-            <li data-bind="css: {active: currentPage() === 1}"}><a href="#" data-bind="click: decrementPage"><</a></li>
-            <!-- ko foreach: paginationValues -->
-            <li data-bind="css: {active: $root.currentPage() === $data}"><a href="#" data-bind="text: $data, click: function() {$root.setPage($data)}"></a></li>
-            <!-- /ko -->
-            <li data-bind="css: {active: currentPage() >= maxPages()}"><a href="#" data-bind="click: incrementPage">></a></li>
-            <li data-bind="css: {active: currentPage() >= maxPages()}"}><a href="#" data-bind="click: goToLastPage">>></a></li>
-          </ul>
-          <br><a class="btn pull-right" data-bind="visible: numberOfResults() > 0, click: printPage">Printable Page</a>
+        <div class="pull-right">
+          <div class="pagination pagination-small" data-bind="visible: !loadingResults() && numberOfResults() > 0">
+            <span class="results" data-bind="text: resultsText"></span>
+            <ul>
+              <li data-bind="css: {active: currentPage() === 1}"}><a href="#" data-bind="click: goToFirstPage"><<</a></li>
+              <li data-bind="css: {active: currentPage() === 1}"}><a href="#" data-bind="click: decrementPage"><</a></li>
+              <!-- ko foreach: paginationValues -->
+              <li data-bind="css: {active: $root.currentPage() === $data}"><a href="#" data-bind="text: $data, click: function() {$root.setPage($data)}"></a></li>
+              <!-- /ko -->
+              <li data-bind="css: {active: currentPage() >= maxPages()}"><a href="#" data-bind="click: incrementPage">></a></li>
+              <li data-bind="css: {active: currentPage() >= maxPages()}"}><a href="#" data-bind="click: goToLastPage">>></a></li>
+            </ul>
+          </div>
+          <div class="pull-left" data-bind="visible: numberOfResults() > 0">
+            <span class="resultsPerPage">Results Per Page</span>
+            <select class="selectpicker" data-bind="options: resultsPerPageOptions,
+                                                    optionsText: 'caption',
+                                                    optionsValue: 'count',
+                                                    value: resultsPerPage,
+                                                    click: setResultsPerPage"
+                                                    >
+            </select>
+          </div>
+          <div class="dropdown pull-right" data-bind="visible: numberOfResults() > 0">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownPrint" data-toggle="dropdown">Print<span class="caret"></span></button>
+            <ul class="dropdown-menu printmenu pull-right" role="menu" aria-labelledby="dropdownPrint">
+              <li role="presentation"><a role="menuitem" class="text-left" tabindex="-1" href="#" data-bind="click: printPage">This Page</a></li>
+              <li role="presentation"><a role="menuitem" class="text-left" tabindex="-1" href="#" data-bind="click: printAll">All Titles</a></li>
+            </ul>
+          </div>
         </div>
         <div class="clearfix"></div>
         <div class="container col-centered">

@@ -23,10 +23,23 @@ dataViewModel = function () {
 	self.numberOfResults = ko.observable(0);
 	self.isHotList = ko.observable(false);
 	self.loadingResults = ko.observable(false);
+	self.resultsPerPage = ko.observable(20);
 	self.maxPages = ko.computed(function() {
-		return Math.ceil(self.numberOfResults() / 20);
+		if (self.resultsPerPage() != 0)
+			return Math.ceil(self.numberOfResults() / self.resultsPerPage());
+		else
+			return 1;
 	});
+	self.lastResultsPerPage = 20;
 	self.loadedTitles = ko.observableArray();
+	self.resultsPerPageOptions = ko.observableArray(
+		[{count: 20, caption: '20'},
+		{count: 50, caption: '50'},
+		{count: 100, caption: '100'},
+		{count: 200, caption: '200'},
+		{count: 0, caption: 'ALL'}
+		]
+	);
 	self.paginationValues = ko.computed(function() {
 		var returnPages = [];
 		if (self.currentPage() === 1){
@@ -53,10 +66,20 @@ dataViewModel = function () {
 		return returnPages;
 	});
 	self.resultsText = ko.computed(function() {
-		var begin = ((self.currentPage() - 1) * 20) + 1;
-		var end = self.currentPage() * 20;
-		if (end > self.numberOfResults())
+		var begin, end;
+		if (self.resultsPerPage() != 0)
+		{
+			begin = ((self.currentPage() - 1) * self.resultsPerPage()) + 1;
+			end = self.currentPage() * self.resultsPerPage();
+			if (end > self.numberOfResults())
+				end = self.numberOfResults();
+		}
+		else
+		{
+			begin = 1;
 			end = self.numberOfResults();
+		}
+
 		return 'Showing ' + begin + '-' + end + ' of ' + self.numberOfResults() + ' results'; 
 	})
 	self.categoryClicked = function(category) {
@@ -117,7 +140,15 @@ dataViewModel = function () {
 		self.isHotList(isHotList);
 		self.loadTitles();
 	}
-	
+
+	self.setResultsPerPage = function() {
+		if (self.lastResultsPerPage != self.resultsPerPage()) {
+			self.lastResultsPerPage = self.resultsPerPage();
+			self.currentPage(1);
+			self.loadTitles();
+		}
+	}
+
 	self.loadTitles = function() {
 		self.loadingResults(true);
 		self.numberOfResults(0);
@@ -130,7 +161,8 @@ dataViewModel = function () {
 				orderby: self.selectedSort(),
 				ascending: self.ascendingDescending(),
 				selectedSearch: self.selectedSearch(),
-				searchTerm: self.searchTerm()
+				searchTerm: self.searchTerm(),
+				resultsPerPage: self.resultsPerPage(),
 			},
 			success: self.titleCallback,
 			error: self.titleCallbackError
@@ -144,7 +176,20 @@ dataViewModel = function () {
 				orderby: self.selectedSort(),
 				ascending: self.ascendingDescending(),
 				selectedSearch: self.selectedSearch(),
-				searchTerm: self.searchTerm()};
+				searchTerm: self.searchTerm(),
+				resultsPerPage: self.resultsPerPage()
+			};
+		window.open(printPagesURL + '?' + jQuery.param(data));
+	}
+
+	self.printAll = function() {
+		data = {currentPage: self.currentPage(),
+				isHotList: self.isHotList(),
+				orderby: self.selectedSort(),
+				ascending: self.ascendingDescending(),
+				selectedSearch: self.selectedSearch(),
+				searchTerm: self.searchTerm(),
+				resultsPerPage: 0};
 		window.open(printPagesURL + '?' + jQuery.param(data));
 	}
 
@@ -157,7 +202,6 @@ dataViewModel = function () {
 			self.loadedTitles.push(Title(title));
 		}
 		self.numberOfResults(response.results);
-		$('#contents').height = $('#titles').position().top+$('#titles').position().outerHeight;
 		self.loadingResults(false);
 	};
 
@@ -165,6 +209,21 @@ dataViewModel = function () {
 		self.loadedTitles([]);
 		self.numberOfResults(0);
 		self.loadingResults(false);
+	};
+
+	
+	ko.bindingHandlers.executeOnEnter = {
+	    init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+	        var allBindings = allBindingsAccessor();
+	        $(element).keypress(function (event) {
+	            var keyCode = (event.which ? event.which : event.keyCode);
+	            if (keyCode === 13) {
+	                allBindings.executeOnEnter.call(viewModel);
+	                return false;
+	            }
+	            return true;
+	        });
+	    }
 	};
 };
 }).call(this);

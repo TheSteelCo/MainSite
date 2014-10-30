@@ -22,12 +22,13 @@ def allowed_file(filename):
 def load_titles():
     data = request.args
     page = data.get('currentPage')
-    searchTerm = data.get('searchTerm')
-    selectedSearch = data.get('selectedSearch').lower()
+    search_term = data.get('searchTerm')
+    selected_search = data.get('selectedSearch').lower()
     orderby = data.get('orderby').lower()
     title_order = ', title' if orderby != 'title' else ''
     desc = ' desc' if data.get('ascending') == 'd' else ''
     orderby = orderby + title_order + desc
+    results_per_page = int(data.get('resultsPerPage'))
 
     if data.get('isHotList') == 'true':
         listTable = HotList
@@ -36,41 +37,60 @@ def load_titles():
         listTable = GeneralList
         regionTable = GeneralListRegions
 
-    if searchTerm == '':
-        items = g.db.query(listTable, regionTable.notes)\
-                    .join(listTable.regions)\
-                    .filter(regionTable.region == current_user.region, regionTable.avail == 'a')\
-                    .order_by(orderby)\
-                    .slice((int(page) - 1) * 20, int(page) * 20)\
-                    .all()
-        total_results = g.db.query(func.count(listTable.code))\
-            .join(listTable.regions)\
-            .filter(regionTable.region == current_user.region, regionTable.avail == 'a')\
-            .scalar()
+    # get items
+    if current_user.region:
+        items_query = g.db.query(listTable, regionTable.notes)
     else:
-        items = g.db.query(listTable, regionTable.notes)\
-                    .filter(getattr(listTable, selectedSearch).like("%" + searchTerm + "%"))\
-                    .join(listTable.regions)\
-                    .filter(regionTable.region == current_user.region, regionTable.avail == 'a')\
-                    .order_by(orderby)\
-                    .slice((int(page) - 1) * 20, int(page) * 20)\
-                    .all()
-        total_results = g.db.query(func.count(listTable.code))\
-            .filter(getattr(listTable, selectedSearch).like("%" + searchTerm + "%"))\
-            .join(listTable.regions)\
+        items_query = g.db.query(listTable)
+
+    if search_term != '':
+        items_query = items_query.filter(getattr(listTable, selected_search).like("%" + search_term + "%"))
+
+    if current_user.region:
+        items_query = items_query.join(listTable.regions)\
             .filter(regionTable.region == current_user.region, regionTable.avail == 'a')\
-            .scalar()
+
+    items_query = items_query.order_by(orderby)
+
+    if results_per_page != 0:
+        items_query = items_query.slice((int(page) - 1) * results_per_page, int(page) * results_per_page)
+    
+    items = items_query.all()
+
+    # get total results
+    results_query = g.db.query(func.count(listTable.code))
+    if search_term != '':
+        results_query = results_query.filter(getattr(listTable, selected_search).like("%" + search_term + "%"))
+
+    if current_user.region:
+        results_query = results_query.join(listTable.regions)\
+            .filter(regionTable.region == current_user.region, regionTable.avail == 'a')
+    
+    total_results = results_query.scalar()
+
     returnTitles = []
-    for item in items:
-        ser = item[0].serialize()
-        returnTitles.append({
-            'mvCompany': ser.get('company').upper(),
-            'mvTitle': ser.get('title').upper(),
-            'mvGenre': ser.get('genre'),
-            'mvStatus': ser.get('status'),
-            'mvDescription': ser.get('notes'),
-            'mvCount': item[1]
-        })
+    if current_user.region:
+        for item in items:
+            ser = item[0].serialize()
+            returnTitles.append({
+                'mvCompany': ser.get('company').upper(),
+                'mvTitle': ser.get('title').upper(),
+                'mvGenre': ser.get('genre'),
+                'mvStatus': ser.get('status'),
+                'mvDescription': ser.get('notes'),
+                'mvCount': item[1]
+            })
+    else:
+        for item in items:
+            ser = item.serialize()
+            returnTitles.append({
+                'mvCompany': ser.get('company').upper(),
+                'mvTitle': ser.get('title').upper(),
+                'mvGenre': ser.get('genre'),
+                'mvStatus': ser.get('status'),
+                'mvDescription': ser.get('notes'),
+                'mvCount': ''
+            })
     return jsonify(dict(titles=returnTitles, results=total_results))
 
 
@@ -80,6 +100,7 @@ def import_lists():
         return jsonify(dict(message='success'))
     else:
         return jsonify(dict(message='error'))
+
 
 @titles.route('/print', methods=['GET'])
 def printable():
@@ -135,14 +156,14 @@ def _import_general_list(file):
                 g.db.execute('DROP TABLE IF EXISTS general_list_regions;')
                 g.db.execute('ALTER TABLE general_list_regions_temp RENAME TO general_list_regions;')
         return True
-    except Exception as ex:
+    except:
         return False
+
 
 def _insert_list(insert_code, insert_region_code):
     if insert_code != '':
         g.db.execute(insert_code[:-2] + ';')
         g.db.execute(insert_region_code[:-2] + ';')
-
 
 
 def _create_temp_general_table():
@@ -184,7 +205,7 @@ def _import_hotlist(file):
                     if insert_code == "":
                         insert_code = "INSERT INTO hot_list_temp(code, title, genre, company, status, notes) VALUES "
                         insert_region_code = "INSERT INTO hot_list_regions_temp(code, region, avail, notes) VALUES "
-                    elif count % 100  == 0:
+                    elif count % 100 == 0:
                         _insert_list(insert_code, insert_region_code)
                         insert_code = "INSERT INTO hot_list_temp(code, title, genre, company, status, notes) VALUES "
                         insert_region_code = "INSERT INTO hot_list_regions_temp(code, region, avail, notes) VALUES "
