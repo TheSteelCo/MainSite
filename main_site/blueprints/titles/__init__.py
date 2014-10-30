@@ -226,7 +226,7 @@ def _import_hotlist(file):
                                 MySQLdb.escape_string(unicode(tabs[i+1], errors='replace').encode('ascii', 'replace')),
                                 MySQLdb.escape_string(unicode(tabs[i], errors='replace').encode('ascii', 'replace'))
                             )
-            count = count + 1
+                count = count + 1
             if insert_code != '':
                 _insert_list(insert_code, insert_region_code)
                 g.db.execute('DROP TABLE IF EXISTS hot_list;')
