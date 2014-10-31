@@ -197,11 +197,9 @@ dataViewModel = function () {
 		var titles, title;
 		titles = response.titles;
 		self.loadedTitles([]);
-		console.log('start');
 		var newTitles = ko.utils.arrayMap(titles, function(item) {
 			return new Title(item);
 		});
-		console.log('stop');
 		self.loadedTitles.push.apply(self.loadedTitles, newTitles);
 		self.numberOfResults(response.results);
 		self.loadingResults(false);
