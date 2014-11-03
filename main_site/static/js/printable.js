@@ -62,10 +62,10 @@ printerModel = function () {
 		var titles, title;
 		titles = response.titles;
 		self.loadedTitles([]);
-		for(i = 0; i < titles.length; i++){
-			title = new Title(titles[i]);
-			self.loadedTitles.push(Title(title));
-		}
+		var newTitles = ko.utils.arrayMap(titles, function(item) {
+			return new Title(item);
+		});
+		self.loadedTitles.push.apply(self.loadedTitles, newTitles);		
 		self.loadingResults(false);
 	};
 
